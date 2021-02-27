@@ -74,25 +74,30 @@ export default defineComponent({
         const lastPlayed = computed(() => trackHistory.value[trackHistory.value.length - 2]);
         const nextPlayed = computed(() => trackHistory.value[trackHistory.value.length - 3]);
 
-        // Calculate colors of current album art
+        /* Calculate colors of current album art */
         const palette = ref([] as string[]);
         const textColor = ref("white"); // TODO: set dynamically
 
         const updatePalette = async () => {
+            // Get a palette of most prominent colors
             const res = (await prominent(nowPlaying.value.albumArt, { format: "rgb", group: 50, amount: 5 })) as number[][];
 
+            // Convert colors to LAB format
             const colors = res.map((c) => Color.rgb(c));
             const colorsLab = colors.map((c) => ({ c, lab: { L: c.l(), A: c.a(), B: c.b() } }));
 
+            // One color will be most prominent
             const c1 = colorsLab.shift();
             if (!c1) return;
 
+            // Second color will be most "different" color
             const diffs = colorsLab.map((c) => ({ c, delta: deltaE.getDeltaE00(c1.lab, c.lab) })).sort((a, b) => b.delta - a.delta);
             const c2 = diffs[2].c;
 
             palette.value = [c1, c2].map(({ c }) => c.hex());
         };
 
+        // When first mounted and then every time nowPlaying changes, update palette
         onMounted(updatePalette);
         watch(nowPlaying, updatePalette);
 
@@ -102,21 +107,6 @@ export default defineComponent({
 </script>
 
 <style lang="postcss">
-/* @property --mid-degree {
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: false;
-}
-
-@keyframes changedegree {
-    from {
-        --mid-degree: 0deg;
-    }
-    to {
-        --mid-degree: 360deg;
-    }
-} */
-
 .color-bg {
     @apply h-full w-full;
     background: black;
