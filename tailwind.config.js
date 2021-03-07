@@ -2,7 +2,11 @@ module.exports = {
     purge: [],
     darkMode: false, // or 'media' or 'class'
     theme: {
-        extend: {}
+        extend: {},
+        fontFamily: {
+            body: ["'PT Sans'"], //, "Helvetica", "Arial", "sans-serif"
+            heading: ["Merriweather"] // "Helvetica", "Arial", "serif"
+        }
     },
     variants: {
         extend: {}

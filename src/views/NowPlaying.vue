@@ -1,5 +1,6 @@
 <template>
-    <div class="h-screen flex flex-col justify-center color-bg">
+    <main class="h-screen grid grid-rows-3 justify-center color-bg">
+        <InfoDisplay />
         <ol class="flex justify-center items-center" :style="{ color: textColor }">
             <TrackCard
                 class="h-64 opacity-60 -mr-14"
@@ -25,12 +26,13 @@
                 hide-info
             />
         </ol>
-    </div>
+    </main>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from "vue";
-import TrackCard from "@/components/TrackCard.vue"; // @ is an alias to /src
+import TrackCard from "@/components/TrackCard.vue";
+import InfoDisplay from "@/components/InfoDisplay.vue";
 import { prominent } from "color.js";
 import deltaE from "delta-e";
 import Color from "color";
@@ -45,7 +47,8 @@ export interface Track {
 export default defineComponent({
     name: "NowPlaying",
     components: {
-        TrackCard
+        TrackCard,
+        InfoDisplay
     },
     setup() {
         const trackHistory = ref([
@@ -54,12 +57,6 @@ export default defineComponent({
                 track: "Hometown",
                 album: "Blurryface",
                 albumArt: "https://images-na.ssl-images-amazon.com/images/I/7103AD5YBlL._SL1425_.jpg"
-            },
-            {
-                artist: "I Prevail",
-                track: "Hurricane",
-                album: "Trauma",
-                albumArt: "https://pbs.twimg.com/media/Dzz_XLWX4AUl7C9.jpg"
             },
             {
                 artist: "Twenty One Pilots",
@@ -74,17 +71,23 @@ export default defineComponent({
                 album: "Transmissions",
                 albumArt: "https://upload.wikimedia.org/wikipedia/en/e/e9/Starset_Transmissions.jpg"
             },
-            // {
-            //     artist: "Glass Animals",
-            //     track: "Tokyo Drifting",
-            //     album: "Dreamland",
-            //     albumArt: "https://upload.wikimedia.org/wikipedia/en/1/11/Dreamland_%28Glass_Animals%29.png"
-            // },
+            {
+                artist: "Glass Animals",
+                track: "Tokyo Drifting",
+                album: "Dreamland",
+                albumArt: "https://upload.wikimedia.org/wikipedia/en/1/11/Dreamland_%28Glass_Animals%29.png"
+            },
             {
                 artist: "Dayseeker",
                 track: "Crooked Soul",
                 album: "Crooked Soul (Single)",
                 albumArt: "https://lastfm.freetls.fastly.net/i/u/500x500/0acddb0724f63ad37eb3c76a6a81733c.jpg"
+            },
+            {
+                artist: "I Prevail",
+                track: "Hurricane",
+                album: "Trauma",
+                albumArt: "https://pbs.twimg.com/media/Dzz_XLWX4AUl7C9.jpg"
             }
         ] as Track[]);
 
@@ -125,21 +128,18 @@ export default defineComponent({
             const diffs = colorsLab.map((c) => ({ c, delta: deltaE.getDeltaE00(c1.lab, c.lab) })).sort((a, b) => b.delta - a.delta);
             const c2 = diffs[0].c;
 
-            // Get color in middle of c1 and c2 to prevent gray deadzone
-            const cmiddle = { c: c1.c.mix(c2.c) };
-
-            palette.value = [c2, cmiddle, c1].map(({ c }) => c.hex());
+            palette.value = [c2, c1].map(({ c }) => c.hex());
         };
 
         // When first mounted and then every time nowPlaying changes, update palette
         onMounted(updatePalette);
         watch(nowPlaying, updatePalette);
 
-        setInterval(() => {
-            const first = trackHistory.value.shift();
-            if (!first) return;
-            trackHistory.value.push(first);
-        }, 2500);
+        // setInterval(() => {
+        //     const first = trackHistory.value.shift();
+        //     if (!first) return;
+        //     trackHistory.value.push(first);
+        // }, 2500);
 
         return { nowPlaying, lastPlayed, nextPlayed, trackHistory, palette, textColor };
     }
@@ -159,8 +159,7 @@ export default defineComponent({
     @apply absolute h-full w-full z-0 opacity-75;
     content: "";
     --start-color: v-bind("palette[0]");
-    --middle-color: v-bind("palette[1]");
-    --end-color: v-bind("palette[2]");
+    --end-color: v-bind("palette[1]");
 
     animation: yes 5s linear infinite;
     /* background: conic-gradient(

@@ -19,7 +19,7 @@ export default defineComponent({
         albumArt: String,
         hideInfo: Boolean
     },
-    setup(props) {
+    setup() {
         //
     }
 });

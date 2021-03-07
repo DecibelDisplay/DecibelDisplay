@@ -4,4 +4,6 @@ import router from "./router";
 import store from "./store";
 import "@/assets/css/tailwind.css";
 
-createApp(App).use(store).use(router).mount("#app");
+import VueSvgInlinePlugin from "vue-svg-inline-plugin";
+
+createApp(App).use(store).use(router).use(VueSvgInlinePlugin).mount("#app");
