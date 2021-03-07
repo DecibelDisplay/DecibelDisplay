@@ -62,14 +62,13 @@ export default defineComponent({
                 artist: "Twenty One Pilots",
                 track: "Jumpsuit",
                 album: "Trench",
-                // albumArt: "https://images-na.ssl-images-amazon.com/images/I/7103AD5YBlL._SL1425_.jpg"
                 albumArt: "https://images-na.ssl-images-amazon.com/images/I/81ucF7MxoeL._SL1441_.jpg"
             },
             {
                 artist: "Starset",
-                track: "Antigravity",
-                album: "Transmissions",
-                albumArt: "https://upload.wikimedia.org/wikipedia/en/e/e9/Starset_Transmissions.jpg"
+                track: "Telepathic",
+                album: "Veesels 2.0",
+                albumArt: "https://images-na.ssl-images-amazon.com/images/I/91sNg8CxcLL._SL1500_.jpg"
             },
             {
                 artist: "Glass Animals",
@@ -147,8 +146,12 @@ export default defineComponent({
 
             const c = c1.mix(c2);
 
-            const h = c.lightness(70).hex();
-            return h;
+            const possibilities = [c.lightness(70), c.lighten(0.5), c.darken(0.5), Color("#fff", "hex")];
+            const bestColor = possibilities.find((p) => p.contrast(c) >= 2) || Color("#000", "hex");
+
+            console.log(bestColor.contrast(c));
+
+            return bestColor.hex();
         });
 
         setInterval(() => {
