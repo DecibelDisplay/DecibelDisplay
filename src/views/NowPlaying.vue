@@ -1,6 +1,6 @@
 <template>
     <main class="h-screen grid grid-rows-3 justify-center color-bg">
-        <InfoDisplay />
+        <InfoDisplay :color="infoColor" />
         <ol class="flex justify-center items-center" :style="{ color: textColor }">
             <TrackCard
                 class="h-64 opacity-60 -mr-14"
@@ -135,13 +135,21 @@ export default defineComponent({
         onMounted(updatePalette);
         watch(nowPlaying, updatePalette);
 
-        // setInterval(() => {
-        //     const first = trackHistory.value.shift();
-        //     if (!first) return;
-        //     trackHistory.value.push(first);
-        // }, 2500);
+        const infoColor = computed(() => {
+            const c = Color(palette.value[1], "hex");
 
-        return { nowPlaying, lastPlayed, nextPlayed, trackHistory, palette, textColor };
+            const h = c.lightness(70).hex();
+            console.log(h);
+            return h;
+        });
+
+        setInterval(() => {
+            const first = trackHistory.value.shift();
+            if (!first) return;
+            trackHistory.value.push(first);
+        }, 2500);
+
+        return { nowPlaying, lastPlayed, nextPlayed, trackHistory, palette, textColor, infoColor };
     }
 });
 </script>
@@ -149,6 +157,8 @@ export default defineComponent({
 <style lang="postcss">
 .color-bg {
     @apply h-full w-full;
+    --start-color: v-bind("palette[0]");
+    --end-color: v-bind("palette[1]");
     background: black;
 }
 .color-bg > * {
@@ -158,25 +168,12 @@ export default defineComponent({
 .color-bg::after {
     @apply absolute h-full w-full z-0 opacity-75;
     content: "";
-    --start-color: v-bind("palette[0]");
-    --end-color: v-bind("palette[1]");
 
     animation: yes 5s linear infinite;
-    /* background: conic-gradient(
-        at 50% 50%,
-        var(--start-color) 0deg,
-        var(--end-color) 90deg,
-         var(--start-color) 180deg,
-        var(--end-color) 270deg,
-        var(--start-color) 360deg
-    ); */
 
     transition: all 500ms ease;
     background: linear-gradient(0deg, var(--start-color), var(--end-color));
-    /* background-size: 300% 100%; */
-
-    /* animation: yes 10s linear infinite; */
-    /* background: linear-gradient(to bottom, var(--start-color) 0% 50%, var(--end-color) 50% 100%); */
+    /* background: black; */
 }
 
 @keyframes yes {

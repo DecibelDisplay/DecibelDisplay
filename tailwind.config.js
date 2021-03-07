@@ -5,7 +5,7 @@ module.exports = {
         extend: {},
         fontFamily: {
             body: ["'PT Sans'"], //, "Helvetica", "Arial", "sans-serif"
-            heading: ["Merriweather"] // "Helvetica", "Arial", "serif"
+            heading: ["Comfortaa"] // "Helvetica", "Arial", "serif"
         }
     },
     variants: {
