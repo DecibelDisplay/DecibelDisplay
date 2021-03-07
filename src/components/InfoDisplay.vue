@@ -1,11 +1,11 @@
 <template>
-    <header class="grid grid-cols-2 mt-16 text-other">
-        <div>
+    <header class="grid grid-rows-2 items-center justify-center mt-16 text-other">
+        <div class="text-center">
             <h1 class="font-heading text-3xl">Good {{ timeOfDay }}!</h1>
             <strong class="block font-heading text-6xl mt-6">{{ timeStr }}</strong>
         </div>
 
-        <ul class="ml-auto space-y-4">
+        <ul class="flex space-x-4">
             <li><Measurement title="68° / 43°" :logo="temperatureLogo" /></li>
             <li><Measurement title="47%" :logo="humidityLogo" /></li>
             <li><Measurement title="30.41 inHg" :logo="pressureLogo" /></li>

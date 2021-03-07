@@ -88,6 +88,12 @@ export default defineComponent({
                 track: "Hurricane",
                 album: "Trauma",
                 albumArt: "https://pbs.twimg.com/media/Dzz_XLWX4AUl7C9.jpg"
+            },
+            {
+                artist: "Architects",
+                track: "Black Lungs",
+                album: "For Those That Wish To Exist",
+                albumArt: "https://upload.wikimedia.org/wikipedia/en/c/cc/ArchitectsFTTWTE.jpg"
             }
         ] as Track[]);
 
@@ -136,10 +142,12 @@ export default defineComponent({
         watch(nowPlaying, updatePalette);
 
         const infoColor = computed(() => {
-            const c = Color(palette.value[1], "hex");
+            const c1 = Color(palette.value[1], "hex");
+            const c2 = Color(palette.value[0], "hex");
+
+            const c = c1.mix(c2);
 
             const h = c.lightness(70).hex();
-            console.log(h);
             return h;
         });
 
