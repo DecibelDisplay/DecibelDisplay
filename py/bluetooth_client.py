@@ -1,5 +1,7 @@
-import dbus, dbus.mainloop.glib, sys
+import dbus, dbus.mainloop.glib, sys, os
 from gi.repository import GLib
+
+from bluezutils import find_interface, find_interface_properties
 
 def on_property_changed(interface, changed, invalidated):
     if interface != 'org.bluez.MediaPlayer1':
@@ -14,6 +16,7 @@ def on_property_changed(interface, changed, invalidated):
 
 def on_playback_control(fd, condition):
     str = fd.readline()
+
     if str.startswith('play'):
         player_iface.Play()
     elif str.startswith('pause'):
@@ -27,7 +30,7 @@ def on_playback_control(fd, condition):
         if vol not in range(0, 128):
             print('Possible Values: 0-127')
             return True
-        transport_prop_iface.Set(
+        transport_props.Set(
                 'org.bluez.MediaTransport1',
                 'Volume',
                 dbus.UInt16(vol))
@@ -38,22 +41,21 @@ if __name__ == '__main__':
     bus = dbus.SystemBus()
     obj = bus.get_object('org.bluez', "/")
     mgr = dbus.Interface(obj, 'org.freedesktop.DBus.ObjectManager')
-    player_iface = None
-    transport_prop_iface = None
-    for path, ifaces in mgr.GetManagedObjects().items():
-	print(ifaces)
-        if 'org.bluez.MediaPlayer1' in ifaces:
-            player_iface = dbus.Interface(
-                    bus.get_object('org.bluez', path),
-                    'org.bluez.MediaPlayer1')
-        elif 'org.bluez.MediaTransport1' in ifaces:
-            transport_prop_iface = dbus.Interface(
-                    bus.get_object('org.bluez', path),
-                    'org.freedesktop.DBus.Properties')
-    if not player_iface:
-        sys.exit('Error: Media Player not found.')
-    if not transport_prop_iface:
-        sys.exit('Error: DBus.Properties iface not found.')
+
+    # Stop any active bluealsa-aplay processes
+    os.system("killall bluealsa-aplay")
+    # Run a new bluealsa-aplay process to stream Bluetooth audio out to speakers
+    os.system("bluealsa-aplay 00:00:00:00:00:00 &")
+
+    # Get necessary interfaces
+    adapter_iface = find_interface("org.bluez.Adapter1")
+    adapter_props = find_interface_properties("org.bluez.Adapter1")
+
+    player_iface = find_interface("org.bluez.MediaPlayer1")
+    transport_props = find_interface_properties("org.bluez.MediaTransport1")
+    
+    # Set Discoverable to True
+    adapter_props.Set(adapter_iface.dbus_interface, "Discoverable", True)
 
     bus.add_signal_receiver(
             on_property_changed,
