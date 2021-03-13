@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -DNDEBUG -Wall -Werror -O2 -Wno-error=class-memaccess -DRAPIDJSON_HAS_STDSTRING  -shared -Wl,-soname,libacsdkManufactory.so -o libacsdkManufactory.so CMakeFiles/acsdkManufactory.dir/CookBook.cpp.o  -Wl,-rpath,/home/pi/sdk-folder/sdk-build/AVSCommon: ../../../AVSCommon/libAVSCommon.so -lcurl 

@@ -1,0 +1,9 @@
+Name: AlexaClientSDK
+Description: A cross-platform, modular SDK for interacting with the Alexa Voice Service
+Version: 1.22.0
+Requires: libcurl sqlite3 gstreamer-1.0 gstreamer-app-1.0
+prefix=/usr/local
+includedir=${prefix}/include
+libdir=${prefix}/lib
+Libs: -L${libdir} -lacsdkAlerts -lacsdkAudioPlayer -lacsdkBluetooth -lacsdkDoNotDisturb -lacsdkEqualizer -lacsdkEqualizerImplementations -lacsdkExternalMediaPlayer -lacsdkExternalMediaPlayerInterfaces -lacsdkMultiRoomMusic -lacsdkNotifications -lacsdkCBLAuthorizationDelegate -lacsdkDefaultDeviceSettingsManager -lacsdkDefaultInternetConnectionMonitor -lacsdkDefaultSampleApplicationOptions -lacsdkLibcurlAlexaCommunications -lacsdkLibcurlHTTPContentFetcher -lacsdkNullMetricRecorder -lacsdkNullSystemTimeZone -lLibPreviewAlexaClient -lacsdkSampleApplicationCBLAuthRequester -lacsdkGstreamerApplicationAudioPipelineFactory -lAVSCommon -lACL -lADSL -lAFML -lCaptionsComponent -lCaptions -lCaptionsLib -lacsdkCore -lacsdkPostConnectOperationProviderRegistrar -lAVSGatewayManager -lCertifiedSender -lEndpoints -lDeviceSettings -lContextManager -lCapabilitiesDelegate -lInterruptModel -lPlaylistParser -lKWD -lSENSORY -lKeywordDetectorProvider -lAIP -lAlexa -lApiGateway -lInteractionModel -lPlaybackController -lSoftwareComponentReporter -lSpeakerManager -lSpeechSynthesizer -lAVSSystem -lTemplateRuntime -lCBLAuthDelegate -lLibSampleApp -lDefaultClient -lAudioResources -lSystemSoundPlayer -lSDKComponent -lMediaPlayer -lRegistrationManager -lacsdkManufactory -lacsdkShared -lacsdkShutdownManager -lacsdkStartupManager -lSpeechEncoder -lSQLiteStorage -lSynchronizeStateSender
+Cflags: -I${includedir}

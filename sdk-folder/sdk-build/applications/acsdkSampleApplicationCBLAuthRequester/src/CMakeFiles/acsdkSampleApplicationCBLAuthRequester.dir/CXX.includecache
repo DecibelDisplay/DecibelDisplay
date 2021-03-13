@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/pi/sdk-folder/sdk-source/avs-device-sdk/SampleApp/Authorization/CBLAuthDelegate/include/CBLAuthDelegate/CBLAuthRequesterInterface.h
+string
+-
+
+/home/pi/sdk-folder/sdk-source/avs-device-sdk/applications/acsdkSampleApplicationCBLAuthRequester/include/acsdkSampleApplicationCBLAuthRequester/SampleApplicationCBLAuthRequester.h
+memory
+-
+acsdkSampleApplicationInterfaces/UIManagerInterface.h
+-
+CBLAuthDelegate/CBLAuthRequesterInterface.h
+-
+
+/home/pi/sdk-folder/sdk-source/avs-device-sdk/applications/acsdkSampleApplicationCBLAuthRequester/src/SampleApplicationCBLAuthRequester.cpp
+iostream
+-
+sstream
+-
+acsdkSampleApplicationCBLAuthRequester/SampleApplicationCBLAuthRequester.h
+/home/pi/sdk-folder/sdk-source/avs-device-sdk/applications/acsdkSampleApplicationCBLAuthRequester/src/acsdkSampleApplicationCBLAuthRequester/SampleApplicationCBLAuthRequester.h
+
+/home/pi/sdk-folder/sdk-source/avs-device-sdk/applications/acsdkSampleApplicationInterfaces/include/acsdkSampleApplicationInterfaces/UIManagerInterface.h
+string
+-
+
