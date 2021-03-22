@@ -1,4 +1,7 @@
 {
+    "gstreamerMediaPlayer":{
+        "audioSink":"alsasink"
+    },
     "cblAuthDelegate":{
         // Path to CBLAuthDelegate's database file. e.g. /home/ubuntu/Build/cblAuthDelegate.db
         // Note: The directory specified must be valid.

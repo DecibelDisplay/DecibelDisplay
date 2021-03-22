@@ -1,0 +1,38 @@
+# CMake generated Testfile for 
+# Source directory: /home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test
+# Build directory: /home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/test
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+  add_test(AlexaAuthorizationDelegateTest "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/test/AlexaAuthorizationDelegateTest" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/inputs")
+  set_tests_properties(AlexaAuthorizationDelegateTest PROPERTIES  LABELS "Integration" _BACKTRACE_TRIPLES "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;100;add_test;/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;0;")
+endif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+  add_test(AlexaCommunicationsLibraryTest "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/test/AlexaCommunicationsLibraryTest" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/inputs")
+  set_tests_properties(AlexaCommunicationsLibraryTest PROPERTIES  LABELS "Integration" _BACKTRACE_TRIPLES "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;100;add_test;/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;0;")
+endif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+  add_test(AlexaDirectiveSequencerLibraryTest "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/test/AlexaDirectiveSequencerLibraryTest" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/inputs")
+  set_tests_properties(AlexaDirectiveSequencerLibraryTest PROPERTIES  LABELS "Integration" _BACKTRACE_TRIPLES "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;100;add_test;/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;0;")
+endif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+  add_test(AudioInputProcessorIntegrationTest "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/test/AudioInputProcessorIntegrationTest" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/inputs")
+  set_tests_properties(AudioInputProcessorIntegrationTest PROPERTIES  LABELS "Integration" _BACKTRACE_TRIPLES "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;100;add_test;/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;0;")
+endif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+  add_test(ServerDisconnectIntegrationTest "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/test/ServerDisconnectIntegrationTest" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/inputs")
+  set_tests_properties(ServerDisconnectIntegrationTest PROPERTIES  LABELS "Integration" _BACKTRACE_TRIPLES "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;100;add_test;/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;0;")
+endif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+  add_test(SpeechSynthesizerIntegrationTest "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/test/SpeechSynthesizerIntegrationTest" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/inputs")
+  set_tests_properties(SpeechSynthesizerIntegrationTest PROPERTIES  LABELS "Integration" _BACKTRACE_TRIPLES "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;100;add_test;/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;0;")
+endif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+  add_test(AlertsIntegrationTest "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/test/AlertsIntegrationTest" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/inputs")
+  set_tests_properties(AlertsIntegrationTest PROPERTIES  LABELS "Integration" _BACKTRACE_TRIPLES "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;100;add_test;/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;0;")
+endif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+if("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
+  add_test(AudioPlayerIntegrationTest "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/test/AudioPlayerIntegrationTest" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-build/Integration/AlexaClientSDKConfig.json" "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/inputs")
+  set_tests_properties(AudioPlayerIntegrationTest PROPERTIES  LABELS "Integration" _BACKTRACE_TRIPLES "/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;100;add_test;/home/pi/SmartMusicDisplay/sdk-folder/sdk-source/avs-device-sdk/Integration/test/CMakeLists.txt;0;")
+endif("${CTEST_CONFIGURATION_TYPE}" MATCHES "^([Ii][Nn][Tt][Ee][Gg][Rr][Aa][Tt][Ii][Oo][Nn])$")
