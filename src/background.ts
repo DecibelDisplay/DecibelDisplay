@@ -3,7 +3,23 @@
 import { app, protocol, BrowserWindow } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
+import { PythonShell } from "python-shell";
+
+
 const isDevelopment = process.env.NODE_ENV !== "production";
+
+PythonShell.defaultOptions = { pythonPath: "/usr/local/opt/python-3.9.0/bin/python3.9" };
+let bluetoothShell = new PythonShell("py/bluetooth_client.py");
+
+bluetoothShell.on("message", msg => {
+	console.log("message");
+	console.log(`Message from Python: ${msg}`);
+});
+
+bluetoothShell.end((err, code, signal) => {
+	if (err) throw err;
+	console.log(`Code: ${code}, signal: ${signal}`);
+});
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
@@ -11,8 +27,8 @@ protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: tru
 async function createWindow() {
     // Create the browser window.
     const win = new BrowserWindow({
-        width: 900,
-        height: 1600,
+        width: 1080,
+        height: 1920,
         webPreferences: {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info

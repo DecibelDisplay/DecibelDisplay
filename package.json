@@ -22,6 +22,7 @@
     "dayjs": "^1.10.4",
     "delta-e": "^0.0.8",
     "node-vibrant": "3.1.6",
+    "python-shell": "^2.0.3",
     "vue": "^3.0.4",
     "vue-router": "^4.0.3",
     "vue-svg-inline-plugin": "^2.2.0",
