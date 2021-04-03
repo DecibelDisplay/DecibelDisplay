@@ -9,6 +9,8 @@ channels = 1 # We only really need mono audio
 refresh_rate = 60 # LED updates per second
 chunk = int(fs / refresh_rate)      # Samples per frame
 
+y_roll = np.random.rand(2, chunk) / 1e16
+
 def start_stream(callback):
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
 
@@ -44,7 +46,12 @@ def start_stream(callback):
             # Process the audio
             data = data / 2.0**15 # Normalizes samples between 0 and 1
 
-            vol = np.max(np.abs(data))
+
+            y_roll[:-1] = y_roll[1:]
+            y_roll[-1, :] = np.copy(data)
+            y_data = np.concatenate(y_roll, axis=0).astype(np.float32)
+
+            vol = np.max(np.abs(y_data))
 
             callback(vol) # The caller can do whatever they want with this data
         except IOError:
@@ -62,6 +69,6 @@ def start_stream(callback):
 # TODO: Delete later
 
 def handle_callback(d):
-    print(d)
+    print("▄" * int(d * 100), int(d * 100))
 
 start_stream(handle_callback)
