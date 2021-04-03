@@ -26,7 +26,7 @@ def start_stream(callback):
         raise RuntimeError(f"Unable to find {device_name} device")
 
 
-    #Open a Stream with the values we just defined
+    # Open a Stream with the values we just defined
     stream = p.open(format=pyaudio.paInt16,
                     channels=channels, # We only need one channel
                     rate=fs,
@@ -41,9 +41,9 @@ def start_stream(callback):
             data = data.astype(np.float32)
             stream.read(stream.get_read_available(), exception_on_overflow=False)
 
-            ## FFT
+            # Process the audio
             data = data / 2.0**15 # Normalizes samples between 0 and 1
-            
+
             vol = np.max(np.abs(data))
 
             callback(vol) # The caller can do whatever they want with this data
@@ -59,7 +59,7 @@ def start_stream(callback):
 
 
 
-
+# TODO: Delete later
 
 def handle_callback(d):
     print(d)
