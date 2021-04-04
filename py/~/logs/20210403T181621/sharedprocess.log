@@ -1,0 +1,1 @@
+[2021-04-03 18:16:26.302] [sharedprocess] [error] [File Watcher (node.js)] Error: ENOENT: no such file or directory, stat '/home/pi/DecibelDisplay/py/~/User/snippets'
