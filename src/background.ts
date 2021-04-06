@@ -7,22 +7,6 @@ import zmq from "zeromq";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-<<<<<<< Updated upstream
-PythonShell.defaultOptions = { pythonPath: "/usr/bin/python3" };
-let bluetoothShell = new PythonShell("py/btclient.py");
-
-bluetoothShell.on("message", msg => {
-	console.log("message");
-	console.log(`Message from Python: ${msg}`);
-});
-
-bluetoothShell.end((err, code, signal) => {
-	if (err) throw err;
-	console.log(`Code: ${code}, signal: ${signal}`);
-});
-
-=======
->>>>>>> Stashed changes
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
 
