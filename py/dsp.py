@@ -52,6 +52,11 @@ def start_stream(callback):
             y_data = np.concatenate(y_roll, axis=0).astype(np.float32)
 
             vol = np.max(np.abs(y_data))
+            fourier = np.fft.rfft(y_data)
+            freq = np.fft.fftfreq(y_data.size, d=1/fs)
+
+            fft_values = zip(fourier, freq)
+            print(fft_values)
 
             callback(vol) # The caller can do whatever they want with this data
         except IOError:
