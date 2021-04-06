@@ -18,6 +18,7 @@ class BluetoothManager(object):
         self.connected = False
         print("done")
 
+    # This finds an interface by name (and optional path) even if it's nested
     async def get_interface(self, interface_name, interface_path=None):
         objs = await self.mgr.call_get_managed_objects()
         for path,ifaces in objs.items():
@@ -29,14 +30,17 @@ class BluetoothManager(object):
                 return bluez_obj.get_interface(interface_name)
 
 btmanager: BluetoothManager
+# When track info changes (pause, resumed, artist, track name, etc.)
 def on_media_update(iface, changed_props, inval_props):
         for changed, variant in changed_props.items():
             print(f'1property changed({iface}): {changed} - {variant.value}')
 
+# State and Volume
 def on_transport_update(iface, changed_props, inval_props):
     for changed, variant in changed_props.items():
             print(f'2property changed({iface}): {changed} - {variant.value}')
 
+# Whether or not a deviec is connected
 async def on_device_update(iface, changed_props, inval_props):
     for changed, variant in changed_props.items():
             if changed == "Connected":
@@ -46,6 +50,7 @@ async def on_device_update(iface, changed_props, inval_props):
                 if connected:
                     await initialize_ifaces()
 
+# Find the interfaces and attach property listeners
 async def initialize_ifaces():
     ifaces = {
         "org.bluez.Adapter1": None,
@@ -61,16 +66,18 @@ async def initialize_ifaces():
 
         iface_props = await btmanager.get_interface("org.freedesktop.DBus.Properties", iface.path)
         
-        
+        # Add a listener for when this iface's properties change
         iface_on_update = ifaces[iface_name]
         if iface_props and iface_on_update:
             iface_props.on_properties_changed(iface_on_update)
 
-        # Ensure the RPi is discoverable
+        
         if iface:
+            # Ensure the RPi is discoverable
             if iface_name == "org.bluez.Adapter1":
                 await iface.set_discoverable(True)
 
+            # Detect whether a device is currently connected or not
             if iface_name == "org.bluez.MediaControl1":
                 btmanager.connected = await iface.get_connected()
                 print(btmanager.connected)
@@ -82,8 +89,6 @@ async def main():
     await btmanager.initialize()
 
     await initialize_ifaces()
-    print("Initialized.")
-    
     
     await loop.create_future()
 
