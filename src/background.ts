@@ -8,8 +8,8 @@ import { PythonShell } from "python-shell";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-PythonShell.defaultOptions = { pythonPath: "/usr/local/opt/python-3.9.0/bin/python3.9" };
-let bluetoothShell = new PythonShell("py/bluetooth_client.py");
+PythonShell.defaultOptions = { pythonPath: "/usr/bin/python3" };
+let bluetoothShell = new PythonShell("py/btclient.py");
 
 bluetoothShell.on("message", msg => {
 	console.log("message");
