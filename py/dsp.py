@@ -3,7 +3,16 @@
 
 import pyaudio
 import numpy as np
+import asyncio
 
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib import style
+
+style.use('fivethirtyeight')
+
+fig = plt.figure()
+plt.xscale("log", base=2)
 fs = 44100 # Samples per second
 channels = 1 # We only really need mono audio
 refresh_rate = 60 # LED updates per second
@@ -36,10 +45,10 @@ def start_stream(callback):
                     input_device_index=device_index,
                     input=True)
 
-    
+    i = 0
     while True:
         try:
-            data = np.fromstring(stream.read(chunk, exception_on_overflow=False), dtype=np.int16)
+            data = np.frombuffer(stream.read(chunk, exception_on_overflow=False), dtype=np.int16)
             data = data.astype(np.float32)
             stream.read(stream.get_read_available(), exception_on_overflow=False)
 
@@ -52,13 +61,32 @@ def start_stream(callback):
             y_data = np.concatenate(y_roll, axis=0).astype(np.float32)
 
             vol = np.max(np.abs(y_data))
-            fourier = np.fft.rfft(y_data)
-            freq = np.fft.fftfreq(y_data.size, d=1/fs)
+            N = len(y_data)
 
-            fft_values = zip(fourier, freq)
-            print(fft_values)
+            y_data *= np.hamming(N)
 
-            callback(vol) # The caller can do whatever they want with this data
+            fourier = np.abs(np.fft.rfft(y_data))
+            freq = np.fft.rfftfreq(len(y_data), d=1/fs)
+
+            fft_values = zip(freq, fourier)
+
+            i += 1
+            if i >= 10:
+                plt.clf()
+                plt.plot(freq, fourier)
+                plt.xscale("log")
+                plt.pause(0.01)
+
+                max_pt = max(fft_values, key=lambda x: x[1])
+
+                plt.plot(max_pt[0], max_pt[1],'ro') 
+
+                
+
+                print(max_pt)
+                i = 0
+
+            # callback(vol) # The caller can do whatever they want with this data
         except IOError:
             print("Overflow detected")
             pass
@@ -76,4 +104,13 @@ def start_stream(callback):
 def handle_callback(d):
     print("▄" * int(d * 100), int(d * 100))
 
+# def update(i):
+#     xs = fourier_xs
+#     ys = fourier_ys
+#     ax1.clear()
+#     ax1.plot(xs, ys)
+
+
+# ani = animation.FuncAnimation(fig, update, interval=1000)
+plt.show(block=False)
 start_stream(handle_callback)

@@ -50,7 +50,7 @@ export default defineComponent({
         TrackCard,
         InfoDisplay
     },
-    setup() {
+    setup(props, context) {
         const trackHistory = ref([
             {
                 artist: "Twenty One Pilots",

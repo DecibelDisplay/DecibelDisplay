@@ -39,7 +39,7 @@ btmanager: BluetoothManager
 # When track info changes (pause, resumed, artist, track name, etc.)
 def on_media_update(iface, changed_props, inval_props):
         for changed, variant in changed_props.items():
-            sock.send(f'property changed({iface}): {changed} - {variant.value}')
+            sock.send(f'property changed({iface}): {changed} - {variant.value}'.encode())
             print(f'1property changed({iface}): {changed} - {variant.value}')
 
 # State and Volume

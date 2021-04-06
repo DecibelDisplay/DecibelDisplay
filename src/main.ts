@@ -6,4 +6,11 @@ import "@/assets/css/tailwind.css";
 
 import VueSvgInlinePlugin from "vue-svg-inline-plugin";
 
+import { ipcRenderer } from 'electron'
+(<any>window).ipcRenderer = ipcRenderer
+
 createApp(App).use(store).use(router).use(VueSvgInlinePlugin).mount("#app");
+
+ipcRenderer.on("trackUpdate", (event, arg: string) => {
+    console.log("trackUpdate", arg);
+});

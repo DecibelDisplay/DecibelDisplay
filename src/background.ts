@@ -3,7 +3,7 @@
 import { app, protocol, BrowserWindow } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-import zmq from "zeromq";
+import * as zmq from "zeromq";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -13,12 +13,14 @@ protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: tru
 async function createWindow() {
     // Create the browser window.
     const win = new BrowserWindow({
-        width: 1080,
-        height: 1920,
+        width: 607,//1080,
+        height: 1080,//1920,
         webPreferences: {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-            nodeIntegration: (process.env.ELECTRON_NODE_INTEGRATION as unknown) as boolean
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true,
         }
         // frame: false
         // fullscreen: true
@@ -62,7 +64,7 @@ app.on("ready", async () => {
         }
     }
     createWindow();
-    createZMQListener();
+    createZMQListener(BrowserWindow.getAllWindows()[0]);
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -80,7 +82,7 @@ if (isDevelopment) {
     }
 }
 
-async function createZMQListener() {
+async function createZMQListener(win: BrowserWindow) {
     const PORT = 7007;
     const sock = new zmq.Pull();
 
@@ -89,5 +91,6 @@ async function createZMQListener() {
 
     for await (const [msg] of sock) {
         console.log(`got message: ${msg}`);
+        win.webContents.send("trackUpdate", msg.toString());
     }
 }

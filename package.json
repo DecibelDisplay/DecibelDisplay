@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "update": "npm-check -u",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
@@ -22,6 +23,7 @@
     "dayjs": "^1.10.4",
     "delta-e": "^0.0.8",
     "node-vibrant": "3.1.6",
+    "npm-check": "^5.9.2",
     "python-shell": "^2.0.3",
     "vue": "^3.0.4",
     "vue-router": "^4.0.3",
@@ -43,7 +45,7 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "autoprefixer": "^10.2.4",
-    "electron": "^11.0.0",
+    "electron": "^12.0.2",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^7.20.0",
     "eslint-plugin-prettier": "^3.3.1",
@@ -51,7 +53,7 @@
     "postcss": "^8.2.6",
     "prettier": "^2.2.1",
     "tailwindcss": "^2.0.3",
-    "typescript": "~4.1.5",
+    "typescript": "^4.2.3",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.6"
   }
 }
