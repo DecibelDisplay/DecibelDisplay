@@ -26,7 +26,8 @@
     "vue": "^3.0.4",
     "vue-router": "^4.0.3",
     "vue-svg-inline-plugin": "^2.2.0",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "zeromq": "6.0.0-beta.6"
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",

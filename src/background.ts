@@ -3,11 +3,11 @@
 import { app, protocol, BrowserWindow } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-import { PythonShell } from "python-shell";
-
+import zmq from "zeromq";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
+<<<<<<< Updated upstream
 PythonShell.defaultOptions = { pythonPath: "/usr/bin/python3" };
 let bluetoothShell = new PythonShell("py/btclient.py");
 
@@ -21,6 +21,8 @@ bluetoothShell.end((err, code, signal) => {
 	console.log(`Code: ${code}, signal: ${signal}`);
 });
 
+=======
+>>>>>>> Stashed changes
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
 
@@ -76,6 +78,7 @@ app.on("ready", async () => {
         }
     }
     createWindow();
+    createZMQListener();
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -90,5 +93,17 @@ if (isDevelopment) {
         process.on("SIGTERM", () => {
             app.quit();
         });
+    }
+}
+
+async function createZMQListener() {
+    const PORT = 7007;
+    const sock = new zmq.Pull();
+
+    sock.connect(`tcp://127.0.0.1:${PORT}`);
+    console.log(`ZMQ Listening on port ${PORT}`);
+
+    for await (const [msg] of sock) {
+        console.log(`got message: ${msg}`);
     }
 }

@@ -2643,7 +2643,11 @@ binary-extensions@^2.0.0:
 
 bindings@^1.5.0:
   version "1.5.0"
+<<<<<<< Updated upstream
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
+=======
+  resolved "https://registry.npmjs.org/bindings/-/bindings-1.5.0.tgz"
+>>>>>>> Stashed changes
   integrity sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==
   dependencies:
     file-uri-to-path "1.0.0"
@@ -5183,7 +5187,11 @@ fs.realpath@^1.0.0:
 
 fsevents@^1.2.7:
   version "1.2.13"
+<<<<<<< Updated upstream
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.2.13.tgz#f325cb0455592428bcf11b383370ef70e3bfcc38"
+=======
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-1.2.13.tgz"
+>>>>>>> Stashed changes
   integrity sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==
   dependencies:
     bindings "^1.5.0"
@@ -5191,7 +5199,11 @@ fsevents@^1.2.7:
 
 fsevents@~2.3.1:
   version "2.3.2"
+<<<<<<< Updated upstream
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
+=======
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
+>>>>>>> Stashed changes
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
 function-bind@^1.1.1:
@@ -7056,7 +7068,11 @@ mz@^2.4.0:
 
 nan@^2.12.1:
   version "2.14.2"
+<<<<<<< Updated upstream
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.2.tgz#f5376400695168f4cc694ac9393d0c9585eeea19"
+=======
+  resolved "https://registry.npmjs.org/nan/-/nan-2.14.2.tgz"
+>>>>>>> Stashed changes
   integrity sha512-M2ufzIiINKCuDfBSAUr1vWQ+vuVcA9kqx8JJUsbQi6yf1uGRyb7HfpdfUr5qLXf3B/t8dPvcjhKMmlfnP47EzQ==
 
 nanoid@^3.1.20:
@@ -7126,6 +7142,14 @@ node-forge@^0.10.0:
   resolved "https://registry.npmjs.org/node-forge/-/node-forge-0.10.0.tgz"
   integrity sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==
 
+<<<<<<< Updated upstream
+=======
+node-gyp-build@^4.1.0:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.2.3.tgz#ce6277f853835f718829efb47db20f3e4d9c4739"
+  integrity sha512-MN6ZpzmfNCRM+3t57PTJHgHyw/h4OWnZ6mR8P5j/uZtqQr46RRuDE/P+g3n0YR/AiYXeWixZZzaip77gdICfRg==
+
+>>>>>>> Stashed changes
 node-ipc@^9.1.1:
   version "9.1.3"
   resolved "https://registry.npmjs.org/node-ipc/-/node-ipc-9.1.3.tgz"
@@ -10829,3 +10853,13 @@ yorkie@^2.0.0:
     is-ci "^1.0.10"
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
+<<<<<<< Updated upstream
+=======
+
+zeromq@6.0.0-beta.6:
+  version "6.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/zeromq/-/zeromq-6.0.0-beta.6.tgz#2b8934cafce735ea9007fd3074ec8aca9bf11204"
+  integrity sha512-wLf6M7pBHijl+BRltUL2VoDpgbQcOZetiX8UzycHL8CcYFxYnRrpoG5fi3UX3+Umavz1lk4/dGaQez8qiDgr/Q==
+  dependencies:
+    node-gyp-build "^4.1.0"
+>>>>>>> Stashed changes

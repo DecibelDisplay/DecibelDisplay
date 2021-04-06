@@ -2,8 +2,14 @@ from dbus_next.aio import MessageBus, ProxyInterface
 from dbus_next import BusType, Message
 import asyncio
 import os
+import zmq
+
+PORT = 7007
 
 loop = asyncio.get_event_loop()
+context = zmq.Context()
+sock = context.socket(zmq.PUSH)
+sock.bind(f"tcp://127.0.0.1:{PORT}")
 
 class BluetoothManager(object):
     @classmethod
@@ -33,6 +39,7 @@ btmanager: BluetoothManager
 # When track info changes (pause, resumed, artist, track name, etc.)
 def on_media_update(iface, changed_props, inval_props):
         for changed, variant in changed_props.items():
+            sock.send(f'property changed({iface}): {changed} - {variant.value}')
             print(f'1property changed({iface}): {changed} - {variant.value}')
 
 # State and Volume
