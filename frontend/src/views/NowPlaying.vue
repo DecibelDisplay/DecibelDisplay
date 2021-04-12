@@ -149,8 +149,6 @@ export default defineComponent({
             const possibilities = [c.lightness(70), c.lighten(0.5), c.darken(0.5), Color("#fff", "hex")];
             const bestColor = possibilities.find((p) => p.contrast(c) >= 2) || Color("#000", "hex");
 
-            console.log(bestColor.contrast(c));
-
             return bestColor.hex();
         });
 

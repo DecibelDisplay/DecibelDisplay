@@ -1,15 +1,22 @@
 from dbus_next.aio import MessageBus, ProxyInterface
-from dbus_next import BusType, Message
+from dbus_next import BusType, Message, Variant
 import asyncio
 import os
 import zmq
+import json
 
 PORT = 7007
 
 loop = asyncio.get_event_loop()
 context = zmq.Context()
-sock = context.socket(zmq.PUSH)
+sock = context.socket(zmq.PUSH) # pylint: disable=no-member
 sock.bind(f"tcp://127.0.0.1:{PORT}")
+
+# Allows serialization of DBus objects
+def CustomDBusEncoder(obj):
+    if isinstance(obj, Variant):
+        return obj.value
+    raise TypeError(f"{obj} is not JSON serializable")
 
 class BluetoothManager(object):
     @classmethod
@@ -39,8 +46,8 @@ btmanager: BluetoothManager
 # When track info changes (pause, resumed, artist, track name, etc.)
 def on_media_update(iface, changed_props, inval_props):
         for changed, variant in changed_props.items():
-            sock.send(f'property changed({iface}): {changed} - {variant.value}'.encode())
-            print(f'1property changed({iface}): {changed} - {variant.value}')
+            sock.send_json({"category": "media_update", "cmd": changed, "data": variant.value}, default=CustomDBusEncoder)
+            
 
 # State and Volume
 def on_transport_update(iface, changed_props, inval_props):

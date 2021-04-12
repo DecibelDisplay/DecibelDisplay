@@ -91,6 +91,6 @@ async function createZMQListener(win: BrowserWindow) {
 
     for await (const [msg] of sock) {
         console.log(`got message: ${msg}`);
-        win.webContents.send("trackUpdate", msg.toString());
+        win.webContents.send("trackUpdate", JSON.parse(msg.toString()));
     }
 }

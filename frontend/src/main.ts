@@ -11,6 +11,6 @@ import { ipcRenderer } from 'electron'
 
 createApp(App).use(store).use(router).use(VueSvgInlinePlugin).mount("#app");
 
-ipcRenderer.on("trackUpdate", (event, arg: string) => {
+ipcRenderer.on("trackUpdate", (event, arg: Record<string, string>) => {
     console.log("trackUpdate", arg);
 });
