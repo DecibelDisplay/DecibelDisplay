@@ -5,7 +5,7 @@
             <TrackCard
                 class="h-64 opacity-60 -mr-14"
                 :artist="lastPlayed.artist"
-                :track="lastPlayed.track"
+                :track="lastPlayed.title"
                 :album="lastPlayed.album"
                 :albumArt="lastPlayed.albumArt"
                 hide-info
@@ -13,14 +13,14 @@
             <TrackCard
                 class="h-80 z-10"
                 :artist="nowPlaying.artist"
-                :track="nowPlaying.track"
+                :track="nowPlaying.title"
                 :album="nowPlaying.album"
                 :albumArt="nowPlaying.albumArt"
             />
             <TrackCard
                 class="h-64 opacity-60 -ml-14"
                 :artist="nextPlayed.artist"
-                :track="nextPlayed.track"
+                :track="nextPlayed.title"
                 :album="nextPlayed.album"
                 :albumArt="nextPlayed.albumArt"
                 hide-info
@@ -31,18 +31,13 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from "vue";
+import TrackModule, {Track} from "@/store/track";
 import TrackCard from "@/components/TrackCard.vue";
 import InfoDisplay from "@/components/InfoDisplay.vue";
 import { prominent } from "color.js";
 import deltaE from "delta-e";
 import Color from "color";
-
-export interface Track {
-    artist: string;
-    track: string;
-    album: string;
-    albumArt: string;
-}
+import { getModule } from "vuex-module-decorators";
 
 export default defineComponent({
     name: "NowPlaying",
@@ -51,54 +46,10 @@ export default defineComponent({
         InfoDisplay
     },
     setup(props, context) {
-        const trackHistory = ref([
-            {
-                artist: "Twenty One Pilots",
-                track: "Hometown",
-                album: "Blurryface",
-                albumArt: "https://images-na.ssl-images-amazon.com/images/I/7103AD5YBlL._SL1425_.jpg"
-            },
-            {
-                artist: "Twenty One Pilots",
-                track: "Jumpsuit",
-                album: "Trench",
-                albumArt: "https://images-na.ssl-images-amazon.com/images/I/81ucF7MxoeL._SL1441_.jpg"
-            },
-            {
-                artist: "Starset",
-                track: "Telepathic",
-                album: "Veesels 2.0",
-                albumArt: "https://images-na.ssl-images-amazon.com/images/I/91sNg8CxcLL._SL1500_.jpg"
-            },
-            {
-                artist: "Glass Animals",
-                track: "Tokyo Drifting",
-                album: "Dreamland",
-                albumArt: "https://upload.wikimedia.org/wikipedia/en/1/11/Dreamland_%28Glass_Animals%29.png"
-            },
-            {
-                artist: "Dayseeker",
-                track: "Crooked Soul",
-                album: "Crooked Soul (Single)",
-                albumArt: "https://lastfm.freetls.fastly.net/i/u/500x500/0acddb0724f63ad37eb3c76a6a81733c.jpg"
-            },
-            {
-                artist: "I Prevail",
-                track: "Hurricane",
-                album: "Trauma",
-                albumArt: "https://pbs.twimg.com/media/Dzz_XLWX4AUl7C9.jpg"
-            },
-            {
-                artist: "Architects",
-                track: "Black Lungs",
-                album: "For Those That Wish To Exist",
-                albumArt: "https://upload.wikimedia.org/wikipedia/en/c/cc/ArchitectsFTTWTE.jpg"
-            }
-        ] as Track[]);
-
-        const nowPlaying = computed(() => trackHistory.value[trackHistory.value.length - 1]);
-        const lastPlayed = computed(() => trackHistory.value[trackHistory.value.length - 2]);
-        const nextPlayed = computed(() => trackHistory.value[0]);
+        const trackStore = getModule(TrackModule);
+        const nowPlaying = computed(() => trackStore.currentTrack);
+        const lastPlayed = computed(() => trackStore.previousTrack);
+        const nextPlayed = computed(() => trackStore.nextTrack);
 
         /* Calculate colors of current album art */
         const palette = ref([] as string[]);
@@ -152,13 +103,7 @@ export default defineComponent({
             return bestColor.hex();
         });
 
-        setInterval(() => {
-            const first = trackHistory.value.shift();
-            if (!first) return;
-            trackHistory.value.push(first);
-        }, 2500);
-
-        return { nowPlaying, lastPlayed, nextPlayed, trackHistory, palette, textColor, infoColor };
+        return { nowPlaying, lastPlayed, nextPlayed, palette, textColor, infoColor };
     }
 });
 </script>

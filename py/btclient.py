@@ -24,7 +24,7 @@ class BluetoothManager(object):
         self.bluez_iname = "org.bluez"
         self.bluez_path = "/"
         self.bus = await MessageBus(bus_type=BusType.SYSTEM).connect()
-        
+
         introspection = await self.bus.introspect(self.bluez_iname, self.bluez_path)
         self.bluez_obj = self.bus.get_proxy_object(self.bluez_iname, self.bluez_path, introspection)
         self.mgr = self.bluez_obj.get_interface('org.freedesktop.DBus.ObjectManager')
@@ -46,7 +46,8 @@ btmanager: BluetoothManager
 # When track info changes (pause, resumed, artist, track name, etc.)
 def on_media_update(iface, changed_props, inval_props):
         for changed, variant in changed_props.items():
-            sock.send_json({"category": "media_update", "cmd": changed, "data": variant.value}, default=CustomDBusEncoder)
+                print(f"Sending cmd {changed}")
+                sock.send_json({"category": "media_update", "cmd": changed, "data": variant.value}, default=CustomDBusEncoder)
             
 
 # State and Volume
