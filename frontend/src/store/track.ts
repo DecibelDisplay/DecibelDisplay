@@ -19,7 +19,7 @@ export interface Track<T = string> {
   albumArt: T;
 }
 
-const defaultTrack: Track = {title: "Nothing", album: "Nowhere", artist: "Nobody", duration: 0, albumArt: "https://upload.wikimedia.org/wikipedia/en/0/00/Half_Alive_Now%2C_Not_Yet.jpg"};
+const defaultTrack: Track = {title: "Nothing", album: "Nowhere", artist: "Nobody", duration: 0, albumArt: "/no_cover.jpg"};
 
 const convertDBusTrack = (t: DBusTrack): Track<null> => ({title: t.Title, album: t.Album, artist: t.Artist, duration: t.Duration, albumArt: null});
 
