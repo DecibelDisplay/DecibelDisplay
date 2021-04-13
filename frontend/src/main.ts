@@ -25,5 +25,7 @@ ipcRenderer.on("trackUpdate", (event, arg: IncomingArg) => {
     const trackStore = getModule(TrackModule);
     if (arg.cmd === "Track") {
         trackStore.addNewTrack(arg.data);
+    } else if (arg.cmd === "Position") {
+        trackStore.updateCurrentTrackTime(arg.data);
     }
 });

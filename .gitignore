@@ -23,7 +23,7 @@ pnpm-debug.log*
 *.sw?
 
 #Electron-builder output
-/dist_electron
+dist_electron
 
 sdk-folder/sdk-build
 py/__pycache__

@@ -19,7 +19,7 @@ export interface Track<T = string> {
   albumArt: T;
 }
 
-const defaultTrack: Track = {title: "Nothing", album: "Nowhere", artist: "Nobody", duration: 0, albumArt: "/no_cover.jpg"};
+const defaultTrack: Track = {title: "Nothing", album: "Nowhere", artist: "Nobody", duration: 0, albumArt: "https://upload.wikimedia.org/wikipedia/en/0/00/Half_Alive_Now%2C_Not_Yet.jpg"};
 
 const convertDBusTrack = (t: DBusTrack): Track<null> => ({title: t.Title, album: t.Album, artist: t.Artist, duration: t.Duration, albumArt: null});
 
@@ -27,6 +27,7 @@ const convertDBusTrack = (t: DBusTrack): Track<null> => ({title: t.Title, album:
 export default class TrackModule extends VuexModule {
   history: Track[] = [] // initialize empty for now
   nextToPlay: Track | null = null;
+  startedAt = Date.now()
 
   get previousTrack(): Track {
     if (this.history.length > 1) return this.history[this.history.length - 2];
@@ -44,12 +45,17 @@ export default class TrackModule extends VuexModule {
   }
 
   @Mutation
-  private addTrack(track: Track) {
+  private ADD_TRACK(track: Track) {
     this.history.push(track);
   }
 
+  @Mutation 
+  private SET_TRACK_START_TIME(t: number = Date.now()) {
+    this.startedAt = t;
+  }
+
   @Mutation
-  private setNextTrack(track: Track) {
+  private SET_NEXT_TRACK(track: Track) {
     this.nextToPlay = track;
   }
 
@@ -59,6 +65,13 @@ export default class TrackModule extends VuexModule {
     const cover: string = await albumArt(nTrack.artist, {album: nTrack.album, size: "large"});
     console.log(cover, /ART/);
     const track: Track = {...nTrack, albumArt: cover};
-    this.addTrack(track);
+    this.ADD_TRACK(track);
+    this.SET_TRACK_START_TIME();
+  }
+
+  @Action
+  updateCurrentTrackTime(currentElapsedMS: number) {
+    const start = Date.now() - currentElapsedMS;
+    this.SET_TRACK_START_TIME(start);
   }
 }

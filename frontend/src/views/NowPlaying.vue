@@ -1,9 +1,10 @@
 <template>
-    <main class="h-screen grid grid-rows-3 justify-center color-bg">
+    <main class="h-screen w-[100vw] grid grid-rows-[0.25fr,auto,auto,auto,1fr] justify-center color-bg">
+        <div><!-- Empty top --></div>
         <InfoDisplay :color="infoColor" />
-        <ol class="flex justify-center items-center" :style="{ color: textColor }">
+        <ol class="grid grid-cols-[3fr,1fr,4fr,1fr,3fr] items-center pb-16 h-auto h-[fit-content] my-20" :style="{ color: textColor }">
             <TrackCard
-                class="h-64 opacity-60 -mr-14"
+                class="opacity-60 col-start-1 col-span-2 row-start-1"
                 :artist="lastPlayed.artist"
                 :track="lastPlayed.title"
                 :album="lastPlayed.album"
@@ -11,14 +12,14 @@
                 hide-info
             />
             <TrackCard
-                class="h-80 z-10"
+                class="z-10 col-start-2 col-span-3 row-start-1"
                 :artist="nowPlaying.artist"
                 :track="nowPlaying.title"
                 :album="nowPlaying.album"
                 :albumArt="nowPlaying.albumArt"
             />
             <TrackCard
-                class="h-64 opacity-60 -ml-14"
+                class="opacity-60 col-start-4 col-span-2 row-start-1"
                 :artist="nextPlayed.artist"
                 :track="nextPlayed.title"
                 :album="nextPlayed.album"
@@ -26,14 +27,17 @@
                 hide-info
             />
         </ol>
+        <TrackBar />
+        <div><!-- Empty bottom --></div>
     </main>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch } from "vue";
-import TrackModule, {Track} from "@/store/track";
+import TrackModule, { Track } from "@/store/track";
 import TrackCard from "@/components/TrackCard.vue";
 import InfoDisplay from "@/components/InfoDisplay.vue";
+import TrackBar from "@/components/TrackBar.vue";
 import { prominent } from "color.js";
 import deltaE from "delta-e";
 import Color from "color";
@@ -43,6 +47,7 @@ export default defineComponent({
     name: "NowPlaying",
     components: {
         TrackCard,
+        TrackBar,
         InfoDisplay
     },
     setup(props, context) {
@@ -116,6 +121,7 @@ export default defineComponent({
     background: black;
 }
 .color-bg > * {
+    @apply mx-20;
     z-index: 1;
 }
 
