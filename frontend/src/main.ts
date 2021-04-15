@@ -18,6 +18,7 @@ type IncomingArg = {
 } & (
     | { cmd: "Track", data: DBusTrack }
     | { cmd: "Position", data: number }
+    | { cmd: "Status", data: "paused" | "playing" }
 );
 
 ipcRenderer.on("trackUpdate", (event, arg: IncomingArg) => {
@@ -27,5 +28,7 @@ ipcRenderer.on("trackUpdate", (event, arg: IncomingArg) => {
         trackStore.addNewTrack(arg.data);
     } else if (arg.cmd === "Position") {
         trackStore.updateCurrentTrackTime(arg.data);
+    } else if (arg.cmd === "Status") {
+        trackStore.setPlayingStatus(arg.data);
     }
 });

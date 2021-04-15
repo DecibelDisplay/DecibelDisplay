@@ -27,7 +27,9 @@ const convertDBusTrack = (t: DBusTrack): Track<null> => ({title: t.Title, album:
 export default class TrackModule extends VuexModule {
   history: Track[] = [] // initialize empty for now
   nextToPlay: Track | null = null;
-  startedAt = Date.now()
+  startedAt = Date.now();
+  playing = false;
+  pausedTime = 0;
 
   get previousTrack(): Track {
     if (this.history.length > 1) return this.history[this.history.length - 2];
@@ -59,7 +61,17 @@ export default class TrackModule extends VuexModule {
     this.nextToPlay = track;
   }
 
-  @Action
+  @Mutation
+  private SET_STATUS(playing: boolean) {
+    this.playing = playing;
+  }
+
+  @Mutation
+  private SET_PAUSE_TIME(time: number) {
+    this.pausedTime = time;
+  }
+
+  @Action({rawError: true})
   async addNewTrack(dtrack: DBusTrack) {
     const nTrack = convertDBusTrack(dtrack);
     const cover: string = await albumArt(nTrack.artist, {album: nTrack.album, size: "large"});
@@ -69,9 +81,15 @@ export default class TrackModule extends VuexModule {
     this.SET_TRACK_START_TIME();
   }
 
-  @Action
+  @Action({rawError: true})
   updateCurrentTrackTime(currentElapsedMS: number) {
     const start = Date.now() - currentElapsedMS;
     this.SET_TRACK_START_TIME(start);
+  }
+
+  @Action({rawError: true})
+  setPlayingStatus(status: "playing" | "paused") {
+    this.SET_STATUS(status === "playing");
+    this.SET_PAUSE_TIME(Date.now() - this.startedAt);
   }
 }

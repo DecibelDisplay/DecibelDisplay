@@ -5,14 +5,11 @@ import pyaudio
 import numpy as np
 import asyncio
 
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-from matplotlib import style
+import board
+import neopixel
 
-style.use('fivethirtyeight')
+the_freaking_pixels = neopixel.NeoPixel(board.D18, 150, auto_write=False)
 
-fig = plt.figure()
-plt.xscale("log", base=2)
 fs = 44100 # Samples per second
 channels = 1 # We only really need mono audio
 refresh_rate = 60 # LED updates per second
@@ -68,25 +65,11 @@ def start_stream(callback):
             fourier = np.abs(np.fft.rfft(y_data))
             freq = np.fft.rfftfreq(len(y_data), d=1/fs)
 
-            fft_values = zip(freq, fourier)
+            fft_values = list(zip(freq, fourier))
+            
+            # pixels.show()
 
-            i += 1
-            if i >= 10:
-                plt.clf()
-                plt.plot(freq, fourier)
-                plt.xscale("log")
-                plt.pause(0.01)
-
-                max_pt = max(fft_values, key=lambda x: x[1])
-
-                plt.plot(max_pt[0], max_pt[1],'ro') 
-
-                
-
-                print(max_pt)
-                i = 0
-
-            # callback(vol) # The caller can do whatever they want with this data
+            callback(fft_values) # The caller can do whatever they want with this data
         except IOError:
             print("Overflow detected")
             pass
@@ -101,16 +84,21 @@ def start_stream(callback):
 
 # TODO: Delete later
 
-def handle_callback(d):
-    print("▄" * int(d * 100), int(d * 100))
+def handle_callback(vals):
+    the_freaking_pixels.fill((0,255, 0))
 
-# def update(i):
-#     xs = fourier_xs
-#     ys = fourier_ys
-#     ax1.clear()
-#     ax1.plot(xs, ys)
+    for i in range(0, len(vals), 5):
+        if i < 750:
+            if i % 3 == 0:
+                the_freaking_pixels[i//5] = (min(255 * vals[i][1], 255), 0, 0)
+            elif i % 3 == 1:
+                the_freaking_pixels[i//5] = (0, min(255 * vals[i][1], 255), 0)
+            else:
+                the_freaking_pixels[i//5] = (0, 0, min(255 * vals[i][1], 255))
+    
+    the_freaking_pixels.show()
 
-
-# ani = animation.FuncAnimation(fig, update, interval=1000)
-plt.show(block=False)
 start_stream(handle_callback)
+
+
+
