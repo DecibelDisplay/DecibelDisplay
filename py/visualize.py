@@ -1,5 +1,5 @@
 # Code to intercept Bluetooth audio and provide values to callback function
-# Heavily inspired by https://github.com/scottlawsonbc/audio-reactive-led-strip/blob/master/python/microphone.py
+# Heavily inspired by https://github.com/scottlawsonbc/audio-reactive-led-strip/blob/master/python/visualization.py
 
 import pyaudio
 import numpy as np
@@ -7,6 +7,7 @@ from scipy import signal
 from scipy.fft import rfft, rfftfreq
 from sklearn import preprocessing
 import asyncio
+import dsp
 
 import board
 import neopixel
@@ -85,8 +86,14 @@ def get_cols_from_mags(mags):
 def hz_to_mels(hz):
     return 2595.0 * np.log10(1.0 + hz/700.0)
 
+gain = dsp.ExpFilter(np.tile(0.01, chunk), alpha_decay=0.001, alpha_rise=0.99)
+
 # Maps the magnitudes linearly onto the LEDs
 def frequency_visualization(mags):
+    # Update the gain
+    gain.update(mags)
+    mags /= gain.value # Ensures the mags are between 0 and 1
+
     viz_LEDs = num_LEDs# // 2 # The output is mirrored
 
     # Squish the data down to the size of the LEDs
@@ -100,8 +107,9 @@ def frequency_visualization(mags):
         new_mags.append(mags[idx])
 
     mags = np.array(new_mags)
+
     # Scale the data between 0 and 1
-    mags = np.clip(mags / 500, 0.1, 1.1) - 0.1
+    # mags = np.clip(mags / 500, 0.1, 1.1) - 0.1
 
     # Convert the magnitude of each frequency to a color
     cols = get_cols_from_mags(mags)
