@@ -3,12 +3,16 @@
 
 import pyaudio
 import numpy as np
+from scipy import signal
+from scipy.fft import rfft, rfftfreq
 import asyncio
 
 import board
 import neopixel
+from colorzero import Color
 
-the_freaking_pixels = neopixel.NeoPixel(board.D18, 150, auto_write=False)
+num_LEDs = 150 # Number of LEDs used
+pixels = neopixel.NeoPixel(board.D18, num_LEDs, auto_write=False)
 
 fs = 44100 # Samples per second
 channels = 1 # We only really need mono audio
@@ -62,14 +66,12 @@ def start_stream(callback):
 
             y_data *= np.hamming(N)
 
-            fourier = np.abs(np.fft.rfft(y_data))
-            freq = np.fft.rfftfreq(len(y_data), d=1/fs)
+            mags = np.abs(rfft(y_data))
+            freqs = rfftfreq(len(y_data), d=1/fs)
 
-            fft_values = list(zip(freq, fourier))
-            
-            # pixels.show()
+            # fft_values = np.array(list(zip(freq, fourier)))
 
-            callback(fft_values) # The caller can do whatever they want with this data
+            callback(freqs, mags) # The caller can do whatever they want with this data
         except IOError:
             print("Overflow detected")
             pass
@@ -79,26 +81,25 @@ def start_stream(callback):
     stream.close()
     p.terminate()
 
+# Assume magnitudes are normalized between 0 and 1
+def get_cols_from_mags(mags):
+    cols = []
+    for i in range(len(mags)):
+        cols[i] = np.array(Color.from_hsv(mags[i], 1, 1).rgb) * 255
+    return cols
 
+# Display 
+def spectrum_visualization(freqs, mags):
+    # Squish the data down to the size of the LEDs
+    mags = signal.resample(mags, num_LEDs)
 
-
-# TODO: Delete later
-
-def handle_callback(vals):
-    the_freaking_pixels.fill((0,255, 0))
-
-    for i in range(0, len(vals), 5):
-        if i < 750:
-            if i % 3 == 0:
-                the_freaking_pixels[i//5] = (min(255 * vals[i][1], 255), 0, 0)
-            elif i % 3 == 1:
-                the_freaking_pixels[i//5] = (0, min(255 * vals[i][1], 255), 0)
-            else:
-                the_freaking_pixels[i//5] = (0, 0, min(255 * vals[i][1], 255))
+    # Convert the magnitude of each frequency to a color
+    pixels[::] = get_cols_from_mags(mags)
     
-    the_freaking_pixels.show()
+    # Update the LEDs
+    pixels.show()
 
-start_stream(handle_callback)
+start_stream(spectrum_visualization)
 
 
 
