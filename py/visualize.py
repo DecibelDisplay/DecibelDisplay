@@ -5,6 +5,7 @@ import pyaudio
 import numpy as np
 from scipy import signal
 from scipy.fft import rfft, rfftfreq
+from sklearn import preprocessing
 import asyncio
 
 import board
@@ -19,7 +20,9 @@ channels = 1 # We only really need mono audio
 refresh_rate = 60 # LED updates per second
 chunk = int(fs / refresh_rate)      # Samples per frame
 
-y_roll = np.random.rand(2, chunk) / 1e16
+max_vol = 0 # The maximum volume seen
+
+y_roll = np.random.rand(10, chunk) / 1e16
 
 def start_stream(callback):
     p = pyaudio.PyAudio()  # Create an interface to PortAudio
@@ -54,24 +57,15 @@ def start_stream(callback):
             stream.read(stream.get_read_available(), exception_on_overflow=False)
 
             # Process the audio
-            data = data / 2.0**15 # Normalizes samples between 0 and 1
 
+            N = len(data)
 
-            y_roll[:-1] = y_roll[1:]
-            y_roll[-1, :] = np.copy(data)
-            y_data = np.concatenate(y_roll, axis=0).astype(np.float32)
+            data *= np.hamming(N)
 
-            vol = np.max(np.abs(y_data))
-            N = len(y_data)
+            mags = np.abs(rfft(data))
+            mags = (2.0 / N) * np.abs(mags[:N//2])
 
-            y_data *= np.hamming(N)
-
-            mags = np.abs(rfft(y_data))
-            freqs = rfftfreq(len(y_data), d=1/fs)
-
-            # fft_values = np.array(list(zip(freq, fourier)))
-
-            callback(freqs, mags) # The caller can do whatever they want with this data
+            callback(mags) # The caller can do whatever they want with this data
         except IOError:
             print("Overflow detected")
             pass
@@ -81,25 +75,42 @@ def start_stream(callback):
     stream.close()
     p.terminate()
 
-# Assume magnitudes are normalized between 0 and 1
+# Assume magnitudes and freqs are normalized between 0 and 1
 def get_cols_from_mags(mags):
     cols = []
     for i in range(len(mags)):
-        cols[i] = np.array(Color.from_hsv(mags[i], 1, 1).rgb) * 255
+        cols.append(np.array(Color.from_hsv(i / len(mags), 1, 1).rgb) * 255 * mags[i])
     return cols
 
-# Display 
-def spectrum_visualization(freqs, mags):
+def hz_to_mels(hz):
+    return 2595.0 * np.log10(1.0 + hz/700.0)
+
+# Maps the magnitudes linearly onto the LEDs
+def frequency_visualization(mags):
+    viz_LEDs = num_LEDs# // 2 # The output is mirrored
+
     # Squish the data down to the size of the LEDs
-    mags = signal.resample(mags, num_LEDs)
+    delta_mel = hz_to_mels(fs / 2) / viz_LEDs
+    freq_step = (fs / 2) / len(mags)
+    new_mags = []
+    cur_freq = 0
+    for _ in range(viz_LEDs):
+        cur_freq = (cur_freq + 700) * pow(10, delta_mel / 2595.0) - 700
+        idx = int(cur_freq // freq_step) - 1
+        new_mags.append(mags[idx])
+
+    mags = np.array(new_mags)
+    # Scale the data between 0 and 1
+    mags = np.clip(mags / 500, 0.1, 1.1) - 0.1
 
     # Convert the magnitude of each frequency to a color
-    pixels[::] = get_cols_from_mags(mags)
+    cols = get_cols_from_mags(mags)
+    pixels[::] = cols #np.concatenate((cols[::-1], cols))
     
     # Update the LEDs
     pixels.show()
 
-start_stream(spectrum_visualization)
+start_stream(frequency_visualization)
 
 
 
