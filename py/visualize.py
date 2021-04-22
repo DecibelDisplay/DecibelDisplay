@@ -8,7 +8,9 @@ from scipy.fft import rfft, rfftfreq
 from sklearn import preprocessing
 import asyncio
 import dsp
+from scipy.ndimage.filters import gaussian_filter1d
 
+import random
 import board
 import neopixel
 from colorzero import Color
@@ -86,13 +88,17 @@ def get_cols_from_mags(mags):
 def hz_to_mels(hz):
     return 2595.0 * np.log10(1.0 + hz/700.0)
 
-gain = dsp.ExpFilter(np.tile(0.01, chunk), alpha_decay=0.001, alpha_rise=0.99)
+gain = dsp.ExpFilter(np.tile(0.01, chunk // 2), alpha_decay=0.0001, alpha_rise=0.99)
+r_filt = dsp.ExpFilter(0, alpha_decay=0.1, alpha_rise=0.99)
+g_filt = dsp.ExpFilter(0, alpha_decay=0.1, alpha_rise=0.99)
+b_filt = dsp.ExpFilter(0, alpha_decay=0.1, alpha_rise=0.99)
 
 # Maps the magnitudes linearly onto the LEDs
 def frequency_visualization(mags):
     # Update the gain
     gain.update(mags)
-    mags /= gain.value # Ensures the mags are between 0 and 1
+    mags /= gain.value 
+    mags[mags > 1] = 1 # Ensures the mags are between 0 and 1
 
     viz_LEDs = num_LEDs# // 2 # The output is mirrored
 
@@ -118,7 +124,113 @@ def frequency_visualization(mags):
     # Update the LEDs
     pixels.show()
 
-start_stream(frequency_visualization)
+# Use magnitude of (bass, mid, treble) as number of LEDs lit up
+def bars_visualization(mags):
+    # Update the gain
+    gain.update(mags)
+    mags /= gain.value 
+    mags[mags > 1] = 1 # Ensures the mags are between 0 and 1
+
+    viz_LEDs = num_LEDs // 2 # The output is mirrored
+    BASS_CUTOFF = 200
+    MID_CUTOFF = 5000
+    freq_step = (fs / 2) / len(mags)
+
+
+    bass_idx = int(BASS_CUTOFF // freq_step) + 1
+    mid_idx = int(MID_CUTOFF // freq_step) + 1
+
+    bass_mag = int(np.mean(mags[0:bass_idx]) * viz_LEDs)
+    mid_mag = int(np.mean(mags[bass_idx:mid_idx]) * viz_LEDs) 
+    high_mag = int(np.mean(mags[mid_idx:]) * viz_LEDs)
+
+    # print("\n".join([f"{((i+1) * freq_step, mags[i])}" for i in range(len(mags))]))
+
+    r, g, b = [bass_mag, mid_mag, high_mag] # Can change the order if necessary
+
+    r = int(r_filt.update(r * 1.2))
+    g = int(g_filt.update(g * 1.2))
+    b = int(b_filt.update(b * 1.2))
+
+    p = np.zeros((viz_LEDs, 3))
+
+    for i in range(viz_LEDs):
+        red = 100 * (1 - i / r) if i < r else 0
+        green = 100 * (1 - i / g) if i < g else 0
+        blue = 100 * (1 - i / b) if i < b else 0
+        p[i] = (red, green, blue)
+
+    pixels[::] = np.concatenate((p[::-1], p)) # Mirror
+
+    pixels.show()
+
+
+p = np.tile(1.0, (3, num_LEDs // 2)) # p has 3 arrays (r, g, b)
+rp_filt = dsp.ExpFilter(0, alpha_decay=0.8, alpha_rise=0.5)
+gp_filt = dsp.ExpFilter(0, alpha_decay=0.8, alpha_rise=0.5)
+bp_filt = dsp.ExpFilter(0, alpha_decay=0.8, alpha_rise=0.5)
+p_gain = dsp.ExpFilter(np.tile(0.01, chunk // 2), alpha_decay=0.0005, alpha_rise=0.99)
+consecutive_zeros = 0
+def pulse_visualization(mags):
+    global p, consecutive_zeros
+    # Update the gain
+    p_gain.update(mags)
+    mags /= p_gain.value 
+    mags[mags > 1] = 1 # Ensures the mags are between 0 and 1
+        
+    viz_LEDs = num_LEDs // 2 # The output is mirrored
+    BASS_CUTOFF = 200
+    MID_CUTOFF = 5000
+    freq_step = (fs / 2) / len(mags)
+
+    bass_idx = int(BASS_CUTOFF // freq_step) + 1
+    mid_idx = int(MID_CUTOFF // freq_step) + 1
+
+    bass_mag = np.median(mags[0:bass_idx])
+    mid_mag = np.median(mags[bass_idx:mid_idx])
+    high_mag = np.median(mags[mid_idx:])
+
+    r, g, b = [bass_mag, mid_mag, high_mag] # Can change the order if necessary
+
+    r = rp_filt.update(r)
+    g = gp_filt.update(g)
+    b = bp_filt.update(b)
+
+    # If there's a long period of silence, reset the gain
+    if max(r, g, b) < 0.2:
+        if consecutive_zeros > 60:
+            print(f"Consecutive zeroes {random.random()}")
+            p_gain.alpha_decay = 0.05
+        else:
+            consecutive_zeros += 1
+    else:
+        consecutive_zeros = 0
+        p_gain.alpha_decay = 0.005
+
+    p[:, 1:] = p[:, :-1] # For each color channel, x[i+1] = x[i] (i.e. shift down)
+    p *= 0.98
+    
+    p = gaussian_filter1d(p, sigma=0.2)
+    
+#     if (r > 0.2 or g > 0.2 or b > 0.2):
+    p[0, 0] = 255 * r ** 2 if r > 0.2 else p[0, 0] * (0.5 + r / 2.0)
+    p[1, 0] = 255 * g ** 2 if g > 0.2 else p[1, 0] * (0.5 + g / 2.0)
+    p[2, 0] = 255 * b ** 2 if b > 0.2 else p[2, 0] * (0.5 + b / 2.0)
+#     else:
+#         p[:, 0] *= 0
+#     
+
+    rgb_pixels = np.concatenate((p[:, ::-1], p), axis=1)
+    
+    cutoff = np.max(mags) / 2
+    rgb_pixels[rgb_pixels < cutoff] = 0
+
+    pixels[::] = [rgb_pixels[:, i] for i in range(len(rgb_pixels[0]))] # Mirror
+
+    pixels.show()
+
+
+start_stream(pulse_visualization)
 
 
 
