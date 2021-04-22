@@ -166,9 +166,9 @@ def bars_visualization(mags):
 
 
 p = np.tile(1.0, (3, num_LEDs // 2)) # p has 3 arrays (r, g, b)
-rp_filt = dsp.ExpFilter(0, alpha_decay=0.8, alpha_rise=0.5)
-gp_filt = dsp.ExpFilter(0, alpha_decay=0.8, alpha_rise=0.5)
-bp_filt = dsp.ExpFilter(0, alpha_decay=0.8, alpha_rise=0.5)
+rp_filt = dsp.ExpFilter(0, alpha_decay=0.1, alpha_rise=0.5)
+gp_filt = dsp.ExpFilter(0, alpha_decay=0.1, alpha_rise=0.5)
+bp_filt = dsp.ExpFilter(0, alpha_decay=0.1, alpha_rise=0.5)
 p_gain = dsp.ExpFilter(np.tile(0.01, chunk // 2), alpha_decay=0.0005, alpha_rise=0.99)
 consecutive_zeros = 0
 def pulse_visualization(mags):
@@ -186,11 +186,25 @@ def pulse_visualization(mags):
     bass_idx = int(BASS_CUTOFF // freq_step) + 1
     mid_idx = int(MID_CUTOFF // freq_step) + 1
 
-    bass_mag = np.median(mags[0:bass_idx])
-    mid_mag = np.median(mags[bass_idx:mid_idx])
-    high_mag = np.median(mags[mid_idx:])
+    bass_vals = mags[0:bass_idx]
+    mid_vals = mags[bass_idx:mid_idx]
+    high_vals = mags[mid_idx:]
 
-    r, g, b = [bass_mag, mid_mag, high_mag] # Can change the order if necessary
+    bass_mag = np.median(bass_vals)
+    mid_mag = np.median(mid_vals)
+    high_mag = np.median(high_vals)
+    
+    bass_freq = np.argmax(bass_vals) / len(mags)
+    mid_freq = (np.argmax(mid_vals) + len(bass_vals)) / len(mags)
+    high_freq = (np.argmax(high_vals) + len(bass_vals) + len(mid_vals)) / len(mags)
+
+    c1 = Color.from_hsv(bass_freq, 1, bass_mag)
+    c2 = Color.from_hsv(mid_freq, 1, mid_mag)
+    c3 = Color.from_hsv(high_freq, 1, high_mag)
+
+    r = np.clip(c1.red + c2.red + c3.red, 0, 1)
+    g = np.clip(c1.green + c2.green + c3.green, 0, 1)
+    b = np.clip(c1.blue + c2.blue + c3.blue, 0, 1)
 
     r = rp_filt.update(r)
     g = gp_filt.update(g)
@@ -212,13 +226,11 @@ def pulse_visualization(mags):
     
     p = gaussian_filter1d(p, sigma=0.2)
     
-#     if (r > 0.2 or g > 0.2 or b > 0.2):
-    p[0, 0] = 255 * r ** 2 if r > 0.2 else p[0, 0] * (0.5 + r / 2.0)
-    p[1, 0] = 255 * g ** 2 if g > 0.2 else p[1, 0] * (0.5 + g / 2.0)
-    p[2, 0] = 255 * b ** 2 if b > 0.2 else p[2, 0] * (0.5 + b / 2.0)
-#     else:
-#         p[:, 0] *= 0
-#     
+    decay = 5.0
+    p[0, 0] = 255 * r ** 2 if r > 0.2 else p[0, 0] * ((decay - 1.0) / decay + r / decay)
+    p[1, 0] = 255 * g ** 2 if g > 0.2 else p[1, 0] * ((decay - 1.0) / decay + g / decay)
+    p[2, 0] = 255 * b ** 2 if b > 0.2 else p[2, 0] * ((decay - 1.0) / decay + b / decay)
+  
 
     rgb_pixels = np.concatenate((p[:, ::-1], p), axis=1)
     
