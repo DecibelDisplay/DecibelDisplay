@@ -1,3 +1,4 @@
+#sudo pip install pimoroni-bme280 smbus
 import time
 from smbus import SMBus
 from bme280 import BME280
