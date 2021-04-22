@@ -186,25 +186,11 @@ def pulse_visualization(mags):
     bass_idx = int(BASS_CUTOFF // freq_step) + 1
     mid_idx = int(MID_CUTOFF // freq_step) + 1
 
-    bass_vals = mags[0:bass_idx]
-    mid_vals = mags[bass_idx:mid_idx]
-    high_vals = mags[mid_idx:]
+    bass_mag = np.median(mags[0:bass_idx])
+    mid_mag = np.median(mags[bass_idx:mid_idx])
+    high_mag = np.median(mags[mid_idx:])
 
-    bass_mag = np.median(bass_vals)
-    mid_mag = np.median(mid_vals)
-    high_mag = np.median(high_vals)
-    
-    bass_freq = np.argmax(bass_vals) / len(mags)
-    mid_freq = (np.argmax(mid_vals) + len(bass_vals)) / len(mags)
-    high_freq = (np.argmax(high_vals) + len(bass_vals) + len(mid_vals)) / len(mags)
-
-    c1 = Color.from_hsv(bass_freq, 1, bass_mag)
-    c2 = Color.from_hsv(mid_freq, 1, mid_mag)
-    c3 = Color.from_hsv(high_freq, 1, high_mag)
-
-    r = np.clip(c1.red + c2.red + c3.red, 0, 1)
-    g = np.clip(c1.green + c2.green + c3.green, 0, 1)
-    b = np.clip(c1.blue + c2.blue + c3.blue, 0, 1)
+    r, g, b = [bass_mag, mid_mag, high_mag] # Can change the order if necessary
 
     r = rp_filt.update(r)
     g = gp_filt.update(g)
