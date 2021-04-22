@@ -85,7 +85,21 @@ if (isDevelopment) {
     }
 }
 
+async function runTemporaryThing(win: BrowserWindow) {
+    const PORT = 7008;
+    const sock = new zmq.Pull();
+
+    sock.connect(`tcp://127.0.0.1:${PORT}`);
+    console.log(`ZMQ Listening on port ${PORT}`);
+
+    for await (const [msg] of sock) {
+        console.log(`got message: ${msg}`);
+        win.webContents.send("data", JSON.parse(msg.toString()));
+    }
+}
+
 async function createZMQListener(win: BrowserWindow) {
+    runTemporaryThing(win);
     const PORT = 7007;
     const sock = new zmq.Pull();
 
@@ -94,6 +108,6 @@ async function createZMQListener(win: BrowserWindow) {
 
     for await (const [msg] of sock) {
         console.log(`got message: ${msg}`);
-        win.webContents.send("trackUpdate", JSON.parse(msg.toString()));
+        win.webContents.send("data", JSON.parse(msg.toString()));
     }
 }

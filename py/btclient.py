@@ -5,7 +5,7 @@ import os
 import zmq
 import json
 
-PORT = 7007
+PORT = 7008
 
 loop = asyncio.get_event_loop()
 context = zmq.Context()

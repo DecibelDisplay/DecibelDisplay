@@ -6,15 +6,17 @@
         </div>
 
         <ul class="flex space-x-4">
-            <li><Measurement title="68° / 43°" :logo="temperatureLogo" /></li>
-            <li><Measurement title="47%" :logo="humidityLogo" /></li>
-            <li><Measurement title="30.41 inHg" :logo="pressureLogo" /></li>
+            <li><Measurement :title="temp" :logo="temperatureLogo" /></li>
+            <li><Measurement :title="hum" :logo="humidityLogo" /></li>
+            <li><Measurement :title="pres" :logo="pressureLogo" /></li>
         </ul>
     </header>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
+import { getModule } from "vuex-module-decorators";
+import SensorModule from "@/store/sensor";
 import Measurement from "@/components/Measurement.vue";
 import temperatureLogo from "@/assets/svg/temperature.svg";
 import humidityLogo from "@/assets/svg/humidity.svg";
@@ -43,7 +45,12 @@ export default defineComponent({
             return "night";
         });
 
-        return { temperatureLogo, humidityLogo, pressureLogo, timeStr, timeOfDay };
+        const sensorStore = getModule(SensorModule);
+        const temp = computed(() => sensorStore.temperature.toFixed(1) + " °C");
+        const hum = computed(() => sensorStore.humidity.toFixed(1) + "%");
+        const pres = computed(() => sensorStore.pressure.toFixed(1) + " hPa");
+
+        return { temperatureLogo, humidityLogo, pressureLogo, timeStr, timeOfDay, temp, hum, pres };
     }
 });
 </script>
