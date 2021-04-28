@@ -1603,6 +1603,8 @@ void Bluetooth::handleDirective(std::shared_ptr<CapabilityAgent::DirectiveInfo> 
 void Bluetooth::executePlay(std::shared_ptr<avsCommon::sdkInterfaces::bluetooth::BluetoothDeviceInterface> device) {
     ACSDK_DEBUG5(LX(__func__));
 
+    
+
     if (!device) {
         ACSDK_ERROR(LX(__func__).d("reason", "nullDevice"));
         return;

@@ -1,5 +1,7 @@
 from dbus_next.aio import MessageBus, ProxyInterface
+from dbus_next.service import (ServiceInterface, method, dbus_property, signal)
 from dbus_next import BusType, Message, Variant
+import bluetooth
 import asyncio
 import os
 import zmq
@@ -29,7 +31,6 @@ class BluetoothManager(object):
         self.bluez_obj = self.bus.get_proxy_object(self.bluez_iname, self.bluez_path, introspection)
         self.mgr = self.bluez_obj.get_interface('org.freedesktop.DBus.ObjectManager')
         self.connected = False
-        print("done")
 
     # This finds an interface by name (and optional path) even if it's nested
     async def get_interface(self, interface_name, interface_path=None):
@@ -41,6 +42,7 @@ class BluetoothManager(object):
                 bluez_intro = await self.bus.introspect(self.bluez_iname, path)
                 bluez_obj = self.bus.get_proxy_object(self.bluez_iname, path, bluez_intro)
                 return bluez_obj.get_interface(interface_name)
+
 
 btmanager: BluetoothManager
 # When track info changes (pause, resumed, artist, track name, etc.)
@@ -56,14 +58,15 @@ def on_transport_update(iface, changed_props, inval_props):
             print(f'2property changed({iface}): {changed} - {variant.value}')
 
 # Whether or not a deviec is connected
-async def on_device_update(iface, changed_props, inval_props):
+def on_device_update(iface, changed_props, inval_props):
     for changed, variant in changed_props.items():
-            if changed == "Connected":
-                connected = variant.value
-                btmanager.connected = connected
-                print(btmanager.connected)
-                if connected:
-                    await initialize_ifaces()
+        print(f'3property changed({iface}): {changed} - {variant.value}')
+        if changed == "Connected":
+            connected = variant.value
+            btmanager.connected = connected
+            print(btmanager.connected)
+            if connected:
+                initialize_ifaces()
 
 # Find the interfaces and attach property listeners
 async def initialize_ifaces():
@@ -71,7 +74,7 @@ async def initialize_ifaces():
         "org.bluez.Adapter1": None,
         "org.bluez.MediaPlayer1": on_media_update,
         "org.bluez.MediaTransport1": on_transport_update,
-        "org.bluez.MediaControl1": on_device_update
+        "org.bluez.MediaControl1": on_device_update,
     }
 
     for iface_name in ifaces:
@@ -95,23 +98,17 @@ async def initialize_ifaces():
             # Detect whether a device is currently connected or not
             if iface_name == "org.bluez.MediaControl1":
                 btmanager.connected = await iface.get_connected()
-                print(btmanager.connected)
+                print(f"Device already connected: {btmanager.connected}")
+
+
 
 
 async def main():
     global btmanager
     btmanager = BluetoothManager()
+    await system("bluetp")
     await btmanager.initialize()
-
     await initialize_ifaces()
-    
     await loop.create_future()
 
-
-# Stop any active bluealsa-aplay processes
-os.system("killall bluealsa-aplay")
-# Run a new bluealsa-aplay process to stream Bluetooth audio out to speakers
-os.system("bluealsa-aplay 00:00:00:00:00:00 &")
-
-print("before")
 loop.run_until_complete(main())
