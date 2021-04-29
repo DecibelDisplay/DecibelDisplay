@@ -1,7 +1,6 @@
 from dbus_next.aio import MessageBus, ProxyInterface
 from dbus_next.service import (ServiceInterface, method, dbus_property, signal)
 from dbus_next import BusType, Message, Variant
-import bluetooth
 import asyncio
 import os
 import zmq
@@ -22,10 +21,11 @@ def CustomDBusEncoder(obj):
 
 class BluetoothManager(object):
     @classmethod
-    async def initialize(self):
+    async def initialize(self, sock):
         self.bluez_iname = "org.bluez"
         self.bluez_path = "/"
         self.bus = await MessageBus(bus_type=BusType.SYSTEM).connect()
+        self.sock = sock # ZMQ Socket
 
         introspection = await self.bus.introspect(self.bluez_iname, self.bluez_path)
         self.bluez_obj = self.bus.get_proxy_object(self.bluez_iname, self.bluez_path, introspection)
@@ -49,7 +49,7 @@ btmanager: BluetoothManager
 def on_media_update(iface, changed_props, inval_props):
         for changed, variant in changed_props.items():
                 print(f"Sending cmd {changed}")
-                sock.send_json({"category": "media_update", "cmd": changed, "data": variant.value}, default=CustomDBusEncoder)
+                btmanager.sock.send_json({"category": "media_update", "cmd": changed, "data": variant.value}, default=CustomDBusEncoder)
             
 
 # State and Volume
@@ -103,12 +103,9 @@ async def initialize_ifaces():
 
 
 
-async def main():
+async def main(loop, sock):
     global btmanager
-    btmanager = BluetoothManager()
-    await system("bluetp")
+    btmanager = BluetoothManager(sock)
     await btmanager.initialize()
     await initialize_ifaces()
     await loop.create_future()
-
-loop.run_until_complete(main())
