@@ -6,6 +6,8 @@ from termcolor import cprint
 from btmanager import BluetoothManager
 from btclient import run_btclient
 from btagent import run_btagent
+from visualize import run_visualize
+from sensor import run_sensor
 
 ######################################################
 #                                                    #
@@ -15,8 +17,6 @@ from btagent import run_btagent
 
 ZMQ_PORT = 7008 # Port that the ZMQ server runs on
 CAPABILITY = "DisplayOnly" # The capability mode the BT agent acts in
-
-
 
 
 ######################################################
@@ -47,9 +47,15 @@ async def main():
 
     # btagent.py (Accepts pairing, trusts device, etc.)
     cprint("Starting btagent.py", "cyan")
-    loop.create_task(run_btagent(btmanager))
+    loop.create_task(run_btagent(btmanager, CAPABILITY))
 
     # visualize.py (Controls the LEDs)
+    cprint("Starting visualize.py", "cyan")
+    loop.create_task(run_visualize(loop))
+
+    # sensor.py (Controls the sensors)
+    cprint("Starting sensor.py", "cyan")
+    loop.create_task(run_sensor(sock))
 
     await loop.create_future()
 

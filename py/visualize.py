@@ -228,7 +228,11 @@ def pulse_visualization(mags):
     pixels.show()
 
 
-start_stream(pulse_visualization)
+if __name__ == "__main__":
+    start_stream(pulse_visualization)
 
 
 
+async def run_visualize(loop):
+    start_stream(pulse_visualization)
+    await loop.create_future()

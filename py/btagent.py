@@ -64,13 +64,13 @@ class BluezAgent(ServiceInterface):
         cprint("Cancel", "green")
 
 
-async def run_btagent(btmanager):
+async def run_btagent(btmanager, capability):
     path = "/test/agent"
     interface = BluezAgent(btmanager)
     btmanager.bus.export(path, interface)
 
     manager = await btmanager.get_interface("org.bluez.AgentManager1")
-    await manager.call_register_agent(path, "DisplayOnly")
+    await manager.call_register_agent(path, capability)
     await manager.call_request_default_agent(path)
 
     await btmanager.bus.wait_for_disconnect()

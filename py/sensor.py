@@ -3,24 +3,19 @@ from time import sleep
 from smbus import SMBus
 from bme280 import BME280
 import zmq
+import asyncio
 
 bus= SMBus(1)
 bme280 =BME280(i2c_dev = bus)
-
-PORT = 7007
-
-context = zmq.Context()
-sock = context.socket(zmq.PUSH) # pylint: disable=no-member
-sock.bind(f"tcp://127.0.0.1:{PORT}")
-
 
 class BME280:
     temp = 0
     pres = 0
     hum  = 0
-    def __init__(self):
+    def __init__(self, sock):
         for _ in range(10):
             self._read_values()
+            self.sock = sock
     
     def _read_values(self):
         self.temp = bme280.get_temperature()
@@ -30,7 +25,7 @@ class BME280:
     def read(self):
         self._read_values()
         data = {"temperature": self.temp, "humidity": self.hum, "pressure": self.pres}
-        sock.send_json({"category": "sensor", "cmd": "sensor", "data": data})
+        self.sock.send_json({"category": "sensor", "cmd": "sensor", "data": data})
 
 
     def __str__(self):
@@ -41,6 +36,8 @@ class BME280:
 
 bme = BME280()
 
-while True:
-    bme.read()
-    sleep(5)
+async def run_sensor(sock):
+    bme = BME280(sock)
+    while True:
+        bme.read()
+        asyncio.sleep(5)
