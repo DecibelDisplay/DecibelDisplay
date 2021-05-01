@@ -16,7 +16,7 @@ from sensor import run_sensor
 ######################################################
 
 ZMQ_PORT = 7008 # Port that the ZMQ server runs on
-CAPABILITY = "DisplayOnly" # The capability mode the BT agent acts in
+CAPABILITY = "DisplayYesNo" # The capability mode the BT agent acts in
 
 
 ######################################################
@@ -47,7 +47,7 @@ async def main():
         # btagent.py (Accepts pairing, trusts device, etc.)
         run_btagent(btmanager, CAPABILITY),
         # visualize.py (Controls the LEDs)
-        run_visualize(loop)
+        # run_visualize(loop)
     )
 
     # # sensor.py (Controls the sensors)

@@ -32,8 +32,8 @@ sudo python3 raspi-blinka2.py
 rm raspi-blinka*.py
 
 # Numba (Python JIT)
-sudo apt install llvm-9
-LLVM_CONFIG=llvm-config-9 sudo py -m pip install llvmlite
+# sudo apt install llvm-9
+# LLVM_CONFIG=llvm-config-9 sudo py -m pip install llvmlite
 
 # Install node.js and npm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
@@ -111,3 +111,7 @@ cd "$PROJ_DIR/sdk-folder"
   #load-module module-bluetooth-discover
   #.endif
 # otherwise Alexa won't be able to control the Bluetooth audio
+
+# Create startup scripts
+# Python -> ??
+# Alexa + Electron -> PM2 (easier to access)/home/pi/DecibelDisplay/decibel_setup.sh

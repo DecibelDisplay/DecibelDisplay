@@ -10,6 +10,7 @@ import asyncio
 import dsp
 from scipy.ndimage.filters import gaussian_filter1d
 from termcolor import cprint
+from time import sleep
 
 import random
 import board
