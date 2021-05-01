@@ -2,7 +2,7 @@
 
 PROJ_DIR=$(pwd)
 
-Setup aliases
+#Setup aliases
 if  grep -q "alias sudo" ~/.bashrc ; then
   echo "Already there"
 else
@@ -14,6 +14,10 @@ fi
 sudo apt update 
 
 sudo apt install libportaudio2 libatlas-base-dev -y
+
+# Add pi and root to pulse-access
+sudo usermod -aG pulse-access root
+sudo usermod -aG pulse-access pi
 
 # Install python packages
 sudo apt remove python3-numpy -y # Remove default version of numpy
@@ -48,8 +52,8 @@ npm i -g yarn
 yarn install
 
 # Setup asound.conf
-sudo echo "" > /etc/asound.conf # Clear out file
-sudo cat > /etc/asound.conf <<DELIM
+sudo echo "" > ~/.asoundrc # Clear out file
+cat > ~/.asoundrc <<DELIM
 pcm.!default {
   type asym
   playback.pcm {
@@ -73,6 +77,8 @@ ctl.pulse_monitor {
   device alsa_output.usb-Generic_TX-Hifi_Type_C_Audio-00.analog-stereo.monitor
 }
 DELIM
+
+sudo cp ~/.asoundrc /etc/asound.conf
 
 # Setup AVS/Alexa required packages
 cd "$PROJ_DIR/sdk-folder"

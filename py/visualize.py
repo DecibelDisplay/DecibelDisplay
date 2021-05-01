@@ -46,7 +46,8 @@ def start_stream(callback):
 
     if (device_index == -1):
         raise RuntimeError(f"Unable to find {device_name} device")
-
+    else:
+        print(f"Found {device_name} device")
 
     # Open a Stream with the values we just defined
     stream = p.open(format=pyaudio.paInt16,
@@ -59,9 +60,12 @@ def start_stream(callback):
     i = 0
     while True:
         try:
-            data = np.frombuffer(stream.read(chunk, exception_on_overflow=False), dtype=np.int16)
+            # print("Before frombuffer")
+            data = np.frombuffer(stream.read(chunk, exception_on_overflow=True), dtype=np.int16)
             data = data.astype(np.float32)
+            print("Before stream read")
             stream.read(stream.get_read_available(), exception_on_overflow=False)
+            print("After stream read")
 
             # Process the audio
 
@@ -75,7 +79,6 @@ def start_stream(callback):
             callback(mags) # The caller can do whatever they want with this data
         except IOError:
             print("Overflow detected")
-            pass
 
     # Stop and close the Stream and PyAudio
     stream.stop_stream()
@@ -239,4 +242,5 @@ if __name__ == "__main__":
 async def run_visualize(loop):
     cprint("Starting visualize.py", "cyan")
     await loop.run_in_executor(None, start_stream, pulse_visualization)
+    print("Done")
     # await loop.create_future()
