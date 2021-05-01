@@ -10,6 +10,10 @@ else
   echo "alias py=python3" >> ~/.bashrc
 fi
 
+# Setup Git
+git config --global user.email "chaley@hawk.iit.edu"
+git config --global user.name "camero2734"
+
 # Update package list
 sudo apt update 
 
