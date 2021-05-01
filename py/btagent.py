@@ -65,6 +65,7 @@ class BluezAgent(ServiceInterface):
 
 
 async def run_btagent(btmanager, capability):
+    cprint("Starting btagent.py", "cyan")
     path = "/test/agent"
     interface = BluezAgent(btmanager)
     btmanager.bus.export(path, interface)

@@ -2,6 +2,7 @@
 from time import sleep
 from smbus import SMBus
 from bme280 import BME280
+from termcolor import cprint
 import zmq
 import asyncio
 
@@ -35,6 +36,7 @@ class Sensor:
         return f"{self.temp}C {self.pres}hPA {self.hum}%"
 
 async def run_sensor(sock):
+    cprint("Starting sensor.py", "cyan")
     bme = Sensor(sock)
     while True:
         bme.read()

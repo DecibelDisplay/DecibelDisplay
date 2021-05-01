@@ -9,11 +9,14 @@ from sklearn import preprocessing
 import asyncio
 import dsp
 from scipy.ndimage.filters import gaussian_filter1d
+from termcolor import cprint
 
 import random
 import board
 import neopixel
 from colorzero import Color
+
+import mute_alsa
 
 num_LEDs = 150 # Number of LEDs used
 pixels = neopixel.NeoPixel(board.D18, num_LEDs, auto_write=False)
@@ -199,7 +202,7 @@ def pulse_visualization(mags):
     # If there's a long period of silence, reset the gain
     if max(r, g, b) < 0.2:
         if consecutive_zeros > 60:
-            print(f"Consecutive zeroes {random.random()}")
+            # print(f"Consecutive zeroes {random.random()}")
             p_gain.alpha_decay = 0.05
         else:
             consecutive_zeros += 1
@@ -234,5 +237,6 @@ if __name__ == "__main__":
 
 
 async def run_visualize(loop):
+    cprint("Starting visualize.py", "cyan")
     start_stream(pulse_visualization)
     await loop.create_future()

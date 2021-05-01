@@ -2,6 +2,7 @@ from dbus_next.aio import MessageBus, ProxyInterface
 from dbus_next.service import (ServiceInterface, method, dbus_property, signal)
 from dbus_next import BusType, Message, Variant
 from termcolor import cprint
+from btmanager import BluetoothManager
 import asyncio
 import os
 import zmq
@@ -50,12 +51,15 @@ async def initialize_ifaces(Updates):
     }
 
     for iface_name in ifaces:
+        print(f"iface_name: {iface_name}")
         iface = await Updates.btmanager.get_interface(iface_name)
+        print("Got interface")
         if not iface:
             continue
 
         iface_props = await Updates.btmanager.get_interface("org.freedesktop.DBus.Properties", iface.path)
-        
+        print("Got interface props")
+
         # Add a listener for when this iface's properties change
         iface_on_update = ifaces[iface_name]
         if iface_props and iface_on_update:
@@ -75,6 +79,21 @@ async def initialize_ifaces(Updates):
 
 
 async def run_btclient(btmanager):
+    cprint("Starting btclient.py", "cyan")
     Updates = OnUpdates(btmanager)
     await initialize_ifaces(Updates)
     await btmanager.bus.wait_for_disconnect()
+
+
+async def main_test():
+    ZMQ_PORT = 7008 # Port that the ZMQ server runs on
+    context = zmq.Context()
+    sock = context.socket(zmq.PUSH) # pylint: disable=no-member
+    sock.bind(f"tcp://127.0.0.1:{ZMQ_PORT}")
+    btmanager = BluetoothManager()
+    await btmanager.initialize(sock)
+    await run_btclient(btmanager)
+
+if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main_test())

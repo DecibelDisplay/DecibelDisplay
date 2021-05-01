@@ -6,8 +6,8 @@ from termcolor import cprint
 from btmanager import BluetoothManager
 from btclient import run_btclient
 from btagent import run_btagent
-# from visualize import run_visualize
-# from sensor import run_sensor
+from visualize import run_visualize
+from sensor import run_sensor
 
 ######################################################
 #                                                    #
@@ -41,17 +41,14 @@ async def main():
     btmanager = BluetoothManager()
     await btmanager.initialize(sock)
 
-    # btclient.py (sets Discoverable, listens for track changes, etc.)
-    cprint("Starting btclient.py", "cyan")
-    loop.create_task(run_btclient(btmanager))
-
-    # btagent.py (Accepts pairing, trusts device, etc.)
-    cprint("Starting btagent.py", "cyan")
-    loop.create_task(run_btagent(btmanager, CAPABILITY))
-
-    # visualize.py (Controls the LEDs)
-    # cprint("Starting visualize.py", "cyan")
-    # loop.create_task(run_visualize(loop))
+    await asyncio.gather(
+        # btclient.py (sets Discoverable, listens for track changes, etc.)
+        run_btclient(btmanager),
+        # btagent.py (Accepts pairing, trusts device, etc.)
+        run_btagent(btmanager, CAPABILITY),
+        # visualize.py (Controls the LEDs)
+        run_visualize(loop)
+    )
 
     # # sensor.py (Controls the sensors)
     # cprint("Starting sensor.py", "cyan")
