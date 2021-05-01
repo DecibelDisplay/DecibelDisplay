@@ -44,7 +44,7 @@ PALIB = libportaudio.la
 PAINC = include/portaudio.h
 
 PA_LDFLAGS = $(LDFLAGS) $(SHARED_FLAGS) -rpath $(libdir) -no-undefined \
-	     -export-symbols-regex "(Pa|PaMacCore|PaJack|PaAlsa|PaAsio|PaOSS|PaWasapi|PaWasapiWinrt)_.*" \
+	     -export-symbols-regex "(Pa|PaMacCore|PaJack|PaAlsa|PaAsio|PaOSS)_.*" \
 	     -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
 COMMON_OBJS = \
@@ -146,7 +146,6 @@ SRC_DIRS = \
 	src/hostapi/dsound \
 	src/hostapi/jack \
 	src/hostapi/oss \
-	src/hostapi/skeleton \
 	src/hostapi/wasapi \
 	src/hostapi/wdmks \
 	src/hostapi/wmme \
@@ -221,16 +220,16 @@ clean:
 distclean: clean
 	$(RM) config.log config.status Makefile libtool portaudio-2.0.pc
 
-%.o: %.c $(MAKEFILE) $(PAINC) lib-stamp
+%.o: %.c $(MAKEFILE) $(PAINC)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-%.lo: %.c $(MAKEFILE) $(PAINC) lib-stamp
+%.lo: %.c $(MAKEFILE) $(PAINC)
 	$(LIBTOOL) --mode=compile $(CC) -c $(CFLAGS) $< -o $@
 
-%.lo: %.cpp $(MAKEFILE) $(PAINC) lib-stamp
+%.lo: %.cpp $(MAKEFILE) $(PAINC)
 	$(LIBTOOL) --mode=compile --tag=CXX $(CXX) -c $(CXXFLAGS) $< -o $@
 
-%.o: %.cpp $(MAKEFILE) $(PAINC) lib-stamp
+%.o: %.cpp $(MAKEFILE) $(PAINC)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 %.o: %.asm

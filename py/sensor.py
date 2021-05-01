@@ -8,7 +8,7 @@ import asyncio
 bus= SMBus(1)
 bme280 =BME280(i2c_dev = bus)
 
-class BME280:
+class Sensor:
     temp = 0
     pres = 0
     hum  = 0
@@ -34,10 +34,8 @@ class BME280:
     def __repr__(self):
         return f"{self.temp}C {self.pres}hPA {self.hum}%"
 
-bme = BME280()
-
 async def run_sensor(sock):
-    bme = BME280(sock)
+    bme = Sensor(sock)
     while True:
         bme.read()
         asyncio.sleep(5)

@@ -11,7 +11,7 @@ namespace portaudio
 	//////
 	/// @brief Adapts the given Device to an ASIO specific extension.
 	///
-	/// Deleting the AsioDeviceAdapter does not affect the underlying 
+	/// Deleting the AsioDeviceAdapter does not affect the underlaying 
 	/// Device.
 	//////
 	class AsioDeviceAdapter
