@@ -25,7 +25,8 @@ export default defineComponent({
         const percent = ref(0);
 
         setInterval(() => {
-            const elapsedMS = trackStore.playing ? Date.now() - trackStore.startedAt : trackStore.pausedTime;
+            let elapsedMS = trackStore.playing ? Date.now() - trackStore.startedAt : trackStore.pausedTime;
+            elapsedMS = Math.min(trackStore.currentTrack.duration, elapsedMS); // Ensure the scrubber stops at the end
             elapsedTime.value = formatDuration(elapsedMS);
             percent.value = 100 * elapsedMS / trackStore.currentTrack.duration;
         }, 100);
