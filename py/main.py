@@ -54,6 +54,5 @@ async def main():
     # cprint("Starting sensor.py", "cyan")
     # loop.create_task(run_sensor(sock))
 
-    await loop.create_future()
 
 loop.run_until_complete(main())

@@ -17,6 +17,7 @@ import neopixel
 from colorzero import Color
 
 import mute_alsa
+# from numba import jit
 
 num_LEDs = 150 # Number of LEDs used
 pixels = neopixel.NeoPixel(board.D18, num_LEDs, auto_write=False)
@@ -174,6 +175,8 @@ gp_filt = dsp.ExpFilter(0, alpha_decay=0.1, alpha_rise=0.5)
 bp_filt = dsp.ExpFilter(0, alpha_decay=0.1, alpha_rise=0.5)
 p_gain = dsp.ExpFilter(np.tile(0.01, chunk // 2), alpha_decay=0.0005, alpha_rise=0.99)
 consecutive_zeros = 0
+
+# @jit
 def pulse_visualization(mags):
     global p, consecutive_zeros
     # Update the gain
@@ -234,9 +237,7 @@ def pulse_visualization(mags):
 if __name__ == "__main__":
     start_stream(pulse_visualization)
 
-
-
 async def run_visualize(loop):
     cprint("Starting visualize.py", "cyan")
-    start_stream(pulse_visualization)
-    await loop.create_future()
+    await loop.run_in_executor(None, start_stream, pulse_visualization)
+    # await loop.create_future()

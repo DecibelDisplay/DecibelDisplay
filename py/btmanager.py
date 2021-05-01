@@ -17,9 +17,7 @@ class BluetoothManager(object):
 
     # This finds an interface by name (and optional path) even if it's nested
     async def get_interface(self, interface_name, interface_path=None):
-        print("Getting interface")
         objs = await self.mgr.call_get_managed_objects()
-        print("Got objs")
         for path,ifaces in objs.items():
             if interface_path and path != interface_path:
                 continue

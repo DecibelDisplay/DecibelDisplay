@@ -94,3 +94,16 @@ make
 cd "$PROJ_DIR/sdk-folder"
 ./build.sh
 ./genJSON.sh
+
+
+# Things not automated:
+# Comment out the following lines in /etc/pulse/default.pa
+  ### Automatically load driver modules for Bluetooth hardware
+  #.ifexists module-bluetooth-policy.so
+  #load-module module-bluetooth-policy
+  #.endif
+
+  #.ifexists module-bluetooth-discover.so
+  #load-module module-bluetooth-discover
+  #.endif
+# otherwise Alexa won't be able to control the Bluetooth audio
