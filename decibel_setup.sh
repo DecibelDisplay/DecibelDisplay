@@ -31,6 +31,10 @@ sed 's/shell.prompt_reboot()//g' raspi-blinka1.py > raspi-blinka2.py # Prevent r
 sudo python3 raspi-blinka2.py
 rm raspi-blinka*.py
 
+# Numba (Python JIT)
+sudo apt install llvm-9
+LLVM_CONFIG=llvm-config-9 sudo py -m pip install llvmlite
+
 # Install node.js and npm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 source ~/.bashrc
