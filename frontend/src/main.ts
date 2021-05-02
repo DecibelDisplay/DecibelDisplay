@@ -2,25 +2,25 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import TrackModule, {DBusTrack} from "./store/track";
+import TrackModule, { DBusTrack } from "./store/track";
 import SensorModule from "./store/sensor";
 import "@/assets/css/tailwind.css";
 
 import VueSvgInlinePlugin from "vue-svg-inline-plugin";
 
-import { ipcRenderer } from 'electron'
+import { ipcRenderer } from "electron";
 import { getModule } from "vuex-module-decorators";
-(<any>window).ipcRenderer = ipcRenderer
+(<any>window).ipcRenderer = ipcRenderer;
 
 createApp(App).use(store).use(router).use(VueSvgInlinePlugin).mount("#app");
 
 type IncomingArg = {
     category: string;
 } & (
-    | { cmd: "Track", data: DBusTrack }
-    | { cmd: "Position", data: number }
-    | { cmd: "Status", data: "paused" | "playing" }
-    | { cmd: "sensor", data: any }
+    | { cmd: "Track"; data: DBusTrack }
+    | { cmd: "Position"; data: number }
+    | { cmd: "Status"; data: "paused" | "playing" }
+    | { cmd: "sensor"; data: any }
 );
 
 ipcRenderer.on("data", (event, arg: IncomingArg) => {
@@ -32,7 +32,7 @@ ipcRenderer.on("data", (event, arg: IncomingArg) => {
     } else if (arg.cmd === "Position") {
         trackStore.updateCurrentTrackTime(arg.data);
     } else if (arg.cmd === "Status") {
-        console.log("Got status update", arg.data)
+        console.log("Got status update", arg.data);
         trackStore.setPlayingStatus(arg.data);
     } else if (arg.cmd === "sensor") {
         sensorModule.setSensorValues(arg.data);

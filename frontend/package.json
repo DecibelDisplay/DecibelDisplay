@@ -1,26 +1,21 @@
 {
   "name": "decibel-display",
+  "version": "1.0.0",
+  "private": true,
   "description": "The frontend application for the Decibel Display",
-  "homepage": "https://github.com/DecibelDisplay/DecibelDisplay",
-  "license": "MIT",
   "author": {
     "name": "Cameron Haley",
     "email": "chaley@hawk.iit.edu"
   },
-  "repository": {
-    "url": "https://github.com/DecibelDisplay/DecibelDisplay"
-  },
-  "version": "1.0.0",
-  "private": true,
   "scripts": {
-    "update": "npm-check -u",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build --armv7l --linux deb",
+    "electron:build": "vue-cli-service electron:build --linux tar.gz --armv7l",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "update": "npm-check -u"
   },
   "main": "background.js",
   "dependencies": {
@@ -68,6 +63,11 @@
     "prettier": "^2.2.1",
     "tailwindcss": "^2.1.1",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.6"
+  },
+  "homepage": "https://github.com/DecibelDisplay/DecibelDisplay",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/DecibelDisplay/DecibelDisplay"
   },
   "resolutions": {
     "vue-cli-plugin-electron-builder/electron-builder": "^22.10.5"

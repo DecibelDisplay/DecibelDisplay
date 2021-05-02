@@ -13,14 +13,14 @@ protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: tru
 async function createWindow() {
     // Create the browser window.
     const win = new BrowserWindow({
-        width: 607,//1080,
-        height: 1080,//1920,
+        width: 607, //1080,
+        height: 1080, //1920,
         webPreferences: {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
             nodeIntegration: true,
             contextIsolation: false,
-            enableRemoteModule: true,
+            enableRemoteModule: true
         }
         // frame: false
         // fullscreen: true
@@ -59,9 +59,9 @@ app.on("ready", async () => {
         // Install Vue Devtools
         try {
             await installExtension({
-                id: 'ljjemllljcmogpfapbkkighbhhppjdbg',
-                electron: '>=1.2.1'
-            })
+                id: "ljjemllljcmogpfapbkkighbhhppjdbg",
+                electron: ">=1.2.1"
+            });
         } catch (e) {
             console.error("Vue Devtools failed to install:", e.toString());
         }

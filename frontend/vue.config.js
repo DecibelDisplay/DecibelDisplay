@@ -2,9 +2,6 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       nodeIntegration: true,
-      builderOptions: {
-        icon: "icon.png",
-      }
     }
   },
   configureWebpack: {
@@ -12,9 +9,9 @@ module.exports = {
     resolve: {
       // ... rest of the resolve config
       fallback: {
-        "path": require.resolve("path-browserify"),
-        "fs": false,
+        path: require.resolve("path-browserify"),
+        fs: false
       }
     }
   }
-}
+};
