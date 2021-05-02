@@ -23,6 +23,16 @@ sudo apt install libportaudio2 libatlas-base-dev pavucontrol -y
 sudo usermod -aG pulse-access root
 sudo usermod -aG pulse-access pi
 
+# Update Bluez
+cd ~
+sudo apt-get install libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev -y
+wget https://mirrors.edge.kernel.org/pub/linux/bluetooth/bluez-5.58.tar.xz
+tar xvf bluez-5.58.tar.xz && cd bluez-5.58
+./configure --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --localstatedir=/var --enable-experimental 
+make -j2
+sudo make install
+
+
 # Install python packages
 sudo apt remove python3-numpy -y # Remove default version of numpy
 sudo python3 -m pip install scipy numpy scikit-learn zmq \

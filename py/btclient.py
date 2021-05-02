@@ -50,9 +50,12 @@ async def initialize_ifaces(Updates):
         "org.bluez.MediaControl1": Updates.on_device_update,
     }
 
+    properties = None
+
     for iface_name in ifaces:
         iface = await Updates.btmanager.get_interface(iface_name)
         if not iface:
+            print(f"No iface for {iface_name}")
             continue
 
         iface_props = await Updates.btmanager.get_interface("org.freedesktop.DBus.Properties", iface.path)
@@ -71,7 +74,10 @@ async def initialize_ifaces(Updates):
             # Detect whether a device is currently connected or not
             if iface_name == "org.bluez.MediaControl1":
                 Updates.btmanager.connected = await iface.get_connected()
+                
 
+            print(f"iface: {iface_name}")
+    
 
 
 
