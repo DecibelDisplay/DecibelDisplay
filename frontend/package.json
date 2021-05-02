@@ -1,13 +1,23 @@
 {
-  "name": "smartmusicdisplay",
-  "version": "0.1.0",
+  "name": "decibel-display",
+  "description": "The frontend application for the Decibel Display",
+  "homepage": "https://github.com/DecibelDisplay/DecibelDisplay",
+  "license": "MIT",
+  "author": {
+    "name": "Cameron Haley",
+    "email": "chaley@hawk.iit.edu"
+  },
+  "repository": {
+    "url": "https://github.com/DecibelDisplay/DecibelDisplay"
+  },
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "update": "npm-check -u",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
+    "electron:build": "vue-cli-service electron:build --armv7l --linux deb",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
@@ -25,6 +35,7 @@
     "delta-e": "^0.0.8",
     "node-vibrant": "3.1.6",
     "npm-check": "^5.9.2",
+    "path-browserify": "^1.0.1",
     "python-shell": "^2.0.3",
     "typescript": "^4.2.4",
     "vue": "^3.0.11",
@@ -38,12 +49,12 @@
     "@types/electron-devtools-installer": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
-    "@vue/cli-plugin-babel": "~5.0.0-alpha.5",
-    "@vue/cli-plugin-eslint": "~5.0.0-alpha.5",
-    "@vue/cli-plugin-router": "~5.0.0-alpha.5",
-    "@vue/cli-plugin-typescript": "~5.0.0-alpha.5",
-    "@vue/cli-plugin-vuex": "~5.0.0-alpha.5",
-    "@vue/cli-service": "~5.0.0-alpha.5",
+    "@vue/cli-plugin-babel": "5.0.0-beta.0",
+    "@vue/cli-plugin-eslint": "5.0.0-beta.0",
+    "@vue/cli-plugin-router": "5.0.0-beta.0",
+    "@vue/cli-plugin-typescript": "5.0.0-beta.0",
+    "@vue/cli-plugin-vuex": "5.0.0-beta.0",
+    "@vue/cli-service": "5.0.0-beta.0",
     "@vue/compiler-sfc": "^3.0.11",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
@@ -57,5 +68,8 @@
     "prettier": "^2.2.1",
     "tailwindcss": "^2.1.1",
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.6"
+  },
+  "resolutions": {
+    "vue-cli-plugin-electron-builder/electron-builder": "^22.10.5"
   }
 }

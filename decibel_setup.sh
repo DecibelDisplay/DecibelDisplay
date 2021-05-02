@@ -17,7 +17,7 @@ git config --global user.name "camero2734"
 # Update package list
 sudo apt update 
 
-sudo apt install libportaudio2 libatlas-base-dev -y
+sudo apt install libportaudio2 libatlas-base-dev pavucontrol -y
 
 # Add pi and root to pulse-access
 sudo usermod -aG pulse-access root

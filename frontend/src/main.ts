@@ -32,6 +32,7 @@ ipcRenderer.on("data", (event, arg: IncomingArg) => {
     } else if (arg.cmd === "Position") {
         trackStore.updateCurrentTrackTime(arg.data);
     } else if (arg.cmd === "Status") {
+        console.log("Got status update", arg.data)
         trackStore.setPlayingStatus(arg.data);
     } else if (arg.cmd === "sensor") {
         sensorModule.setSensorValues(arg.data);

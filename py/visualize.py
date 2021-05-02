@@ -63,9 +63,7 @@ def start_stream(callback):
             # print("Before frombuffer")
             data = np.frombuffer(stream.read(chunk, exception_on_overflow=True), dtype=np.int16)
             data = data.astype(np.float32)
-            print("Before stream read")
             stream.read(stream.get_read_available(), exception_on_overflow=False)
-            print("After stream read")
 
             # Process the audio
 
@@ -237,7 +235,7 @@ def pulse_visualization(mags):
 
 
 if __name__ == "__main__":
-    start_stream(pulse_visualization)
+    start_stream(bars_visualization)
 
 async def run_visualize(loop):
     cprint("Starting visualize.py", "cyan")
