@@ -39,11 +39,9 @@ using namespace avsCommon::avs;
 using namespace avsCommon::sdkInterfaces;
 using namespace avsCommon::sdkInterfaces::modeController;
 
-const std::string PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_RED = "Red";
+const std::string PeripheralEndpointModeControllerHandler::LED_MODE_PULSE = "Pulse";
 
-const std::string PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_GREEN = "Green";
-
-const std::string PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_BLUE = "Blue";
+const std::string PeripheralEndpointModeControllerHandler::LED_MODE_BARS = "Bars";
 
 /**
  * Helper function to notify mode value change to the observers of @c ModeControllerObserverInterface.
@@ -75,7 +73,7 @@ PeripheralEndpointModeControllerHandler::PeripheralEndpointModeControllerHandler
     const std::string& instance) :
         m_endpointName{endpointName},
         m_instance{instance},
-        m_modes{MODE_CONTROLLER_MODE_RED, MODE_CONTROLLER_MODE_GREEN, MODE_CONTROLLER_MODE_BLUE} {
+        m_modes{LED_MODE_PULSE, LED_MODE_BARS} {
     m_currentMode = m_modes[0];
 }
 
@@ -99,6 +97,10 @@ std::pair<AlexaResponseType, std::string> PeripheralEndpointModeControllerHandle
     if (m_currentMode != mode) {
         ConsolePrinter::prettyPrint({"ENDPOINT: " + m_endpointName, "INSTANCE: " + m_instance, "MODE SET TO: " + mode});
         m_currentMode = mode;
+
+        // TODO: Actual handler code goes here
+
+
         copyOfObservers = m_observers;
         notifyObserver = true;
     }

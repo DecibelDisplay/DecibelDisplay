@@ -246,13 +246,13 @@ static const double DEFAULT_ENDPOINT_RANGE_CONTROLLER_PRESET_LOW = 1;
 // Discoball uses semantic annotations to enable additional natural utterances.
 
 /// The derived endpoint Id used in endpoint creation.
-static const std::string PERIPHERAL_ENDPOINT_DERIVED_ENDPOINT_ID("Discoball");
+static const std::string PERIPHERAL_ENDPOINT_DERIVED_ENDPOINT_ID("DLEDs");
 
 /// The description of the endpoint.
-static const std::string PERIPHERAL_ENDPOINT_DESCRIPTION("Sample Discoball Description");
+static const std::string PERIPHERAL_ENDPOINT_DESCRIPTION("The LED strip on your Decibel Display");
 
 /// The friendly name of the peripheral endpoint. This is used in utterance.
-static const std::string PERIPHERAL_ENDPOINT_FRIENDLYNAME("Discoball");
+static const std::string PERIPHERAL_ENDPOINT_FRIENDLYNAME("DecibelLEDs");
 
 /// The manufacturer of peripheral endpoint.
 static const std::string PERIPHERAL_ENDPOINT_MANUFACTURER_NAME("Sample Manufacturer");
@@ -261,19 +261,19 @@ static const std::string PERIPHERAL_ENDPOINT_MANUFACTURER_NAME("Sample Manufactu
 static const std::vector<std::string> PERIPHERAL_ENDPOINT_DISPLAYCATEGORY({"OTHER"});
 
 /// The instance name for the toggle controller in peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_TOGGLE_CONTROLLER_INSTANCE_NAME("Discoball.Light");
+static const std::string PERIPHERAL_ENDPOINT_TOGGLE_CONTROLLER_INSTANCE_NAME("DecibelLEDs.Light");
 
 /// The friendly name of the toggle controller on peripheral endpoint.
 static const std::string PERIPHERAL_ENDPOINT_TOGGLE_CONTROLLER_FRIENDLY_NAME("Light");
 
 /// The instance name for the range controller peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_INSTANCE_NAME("Discoball.Height");
+static const std::string PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_INSTANCE_NAME("DecibelLEDs.Height");
 
 /// The friendly name of the range controller on peripheral endpoint.
 static const std::string PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_FRIENDLY_NAME("Height");
 
 /// The instance name for the mode controller peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_MODE_CONTROLLER_INSTANCE_NAME("Discoball.Mode");
+static const std::string PERIPHERAL_ENDPOINT_MODE_CONTROLLER_INSTANCE_NAME("DecibelLEDs.Mode");
 
 /// The friendly name of the mode controller on peripheral endpoint.
 static const std::string PERIPHERAL_ENDPOINT_MODE_CONTROLLER_FRIENDLY_NAME("Light");
@@ -1872,12 +1872,10 @@ bool SampleApplication::addControllersToPeripheralEndpoint(
     auto peripheralEndpointModeControllerAttributes = buildModeControllerAttributes(
         {{{FriendlyName::Type::ASSET, avsCommon::avs::resources::ASSET_ALEXA_SETTING_MODE},
           {FriendlyName::Type::TEXT, PERIPHERAL_ENDPOINT_MODE_CONTROLLER_FRIENDLY_NAME}}},
-        {{PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_RED,
-          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_RED}}},
-         {PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_GREEN,
-          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_GREEN}}},
-         {PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_BLUE,
-          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_BLUE}}}});
+        {{PeripheralEndpointModeControllerHandler::LED_MODE_PULSE,
+          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::LED_MODE_PULSE}}},
+         {PeripheralEndpointModeControllerHandler::LED_MODE_BARS,
+          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::LED_MODE_BARS}}}});
 
     if (!peripheralEndpointModeControllerAttributes.hasValue()) {
         ACSDK_CRITICAL(LX("Failed to create default endpoint mode controller attributes!"));

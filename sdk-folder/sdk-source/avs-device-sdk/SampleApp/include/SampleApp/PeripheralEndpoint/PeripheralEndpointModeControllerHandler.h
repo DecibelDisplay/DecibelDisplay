@@ -30,14 +30,12 @@ namespace sampleApp {
 class PeripheralEndpointModeControllerHandler
         : public avsCommon::sdkInterfaces::modeController::ModeControllerInterface {
 public:
-    /// The mode 'Red' of the controller
-    static const std::string MODE_CONTROLLER_MODE_RED;
+    /// The mode 'Pulse' of the controller
+    static const std::string LED_MODE_PULSE;
 
-    /// The mode 'Green' of the controller
-    static const std::string MODE_CONTROLLER_MODE_GREEN;
+    /// The mode 'Bars' of the controller
+    static const std::string LED_MODE_BARS;
 
-    /// The mode 'Blue' of the controller
-    static const std::string MODE_CONTROLLER_MODE_BLUE;
 
     /**
      * Create a PeripheralEndpointModeControllerHandler object.

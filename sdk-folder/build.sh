@@ -11,6 +11,9 @@ cmake /home/pi/DecibelDisplay/sdk-folder/sdk-source/avs-device-sdk \
  -DBLUETOOTH_BLUEZ=ON \
  -DPORTAUDIO=ON \
  -DPORTAUDIO_LIB_PATH=/home/pi/DecibelDisplay/sdk-folder/third-party/portaudio/lib/.libs/libportaudio.a \
- -DPORTAUDIO_INCLUDE_DIR=/home/pi/DecibelDisplay/sdk-folder/third-party/portaudio/include
+ -DPORTAUDIO_INCLUDE_DIR=/home/pi/DecibelDisplay/sdk-folder/third-party/portaudio/include \
+ -DENDPOINT_ENABLE_ALL_ENDPOINT_CONTROLLERS=ON \
+ -DENDPOINT_CONTROLLERS_MODE_CONTROLLER=ON \
+ -DENDPOINT_CONTROLLERS_RANGE_CONTROLLER=OFF
 
 make SampleApp -j2

@@ -145,9 +145,9 @@ static const char TOGGLE_CONTROLLER_OFF = '2';
 #endif
 
 #ifdef MODE_CONTROLLER
-static const char MODE_RED = '1';
-static const char MODE_GREEN = '2';
-static const char MODE_BLUE = '3';
+static const char MODE_PULSE = '1';
+static const char MODE_BARS = '2';
+
 #endif
 
 #endif
@@ -948,12 +948,10 @@ void UserInputManager::endpointControllerMenu() {
             m_interactionManager->modeController();
             std::cin >> optionSelected;
             if (!std::cin.fail()) {
-                if (optionSelected == MODE_RED) {
-                    m_interactionManager->setMode(PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_RED);
-                } else if (optionSelected == MODE_GREEN) {
-                    m_interactionManager->setMode(PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_GREEN);
-                } else if (optionSelected == MODE_BLUE) {
-                    m_interactionManager->setMode(PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_BLUE);
+                if (optionSelected == MODE_PULSE) {
+                    m_interactionManager->setMode(PeripheralEndpointModeControllerHandler::LED_MODE_PULSE);
+                } else if (optionSelected == MODE_BARS) {
+                    m_interactionManager->setMode(PeripheralEndpointModeControllerHandler::LED_MODE_BARS);
                 } else if (QUIT == optionSelected) {
                     return;
                 } else {

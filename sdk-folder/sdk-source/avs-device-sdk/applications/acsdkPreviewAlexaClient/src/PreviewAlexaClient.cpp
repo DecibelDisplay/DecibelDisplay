@@ -262,37 +262,26 @@ static const double DEFAULT_ENDPOINT_RANGE_CONTROLLER_PRESET_LOW = 1;
 // Discoball uses semantic annotations to enable additional natural utterances.
 
 /// The derived endpoint Id used in endpoint creation.
-static const std::string PERIPHERAL_ENDPOINT_DERIVED_ENDPOINT_ID("Discoball");
+static const std::string PERIPHERAL_ENDPOINT_DERIVED_ENDPOINT_ID("DECIBEL_LEDS");
 
 /// The description of the endpoint.
-static const std::string PERIPHERAL_ENDPOINT_DESCRIPTION("Sample Discoball Description");
+static const std::string PERIPHERAL_ENDPOINT_DESCRIPTION("The LED strip on your Decibel Display");
 
 /// The friendly name of the peripheral endpoint. This is used in utterance.
-static const std::string PERIPHERAL_ENDPOINT_FRIENDLYNAME("Discoball");
+static const std::string PERIPHERAL_ENDPOINT_FRIENDLYNAME("Decibel LEDs");
 
 /// The manufacturer of peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_MANUFACTURER_NAME("Sample Manufacturer");
+static const std::string PERIPHERAL_ENDPOINT_MANUFACTURER_NAME("DECIBEL");
 
 /// The display category of the peripheral endpoint.
-static const std::vector<std::string> PERIPHERAL_ENDPOINT_DISPLAYCATEGORY({"OTHER"});
+static const std::vector<std::string> PERIPHERAL_ENDPOINT_DISPLAYCATEGORY({"LIGHT"});
 
-/// The instance name for the toggle controller in peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_TOGGLE_CONTROLLER_INSTANCE_NAME("Discoball.Light");
-
-/// The friendly name of the toggle controller on peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_TOGGLE_CONTROLLER_FRIENDLY_NAME("Light");
-
-/// The instance name for the range controller peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_INSTANCE_NAME("Discoball.Height");
-
-/// The friendly name of the range controller on peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_FRIENDLY_NAME("Height");
 
 /// The instance name for the mode controller peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_MODE_CONTROLLER_INSTANCE_NAME("Discoball.Mode");
+static const std::string PERIPHERAL_ENDPOINT_MODE_CONTROLLER_INSTANCE_NAME("LEDs.Visualization");
 
 /// The friendly name of the mode controller on peripheral endpoint.
-static const std::string PERIPHERAL_ENDPOINT_MODE_CONTROLLER_FRIENDLY_NAME("Light");
+static const std::string PERIPHERAL_ENDPOINT_MODE_CONTROLLER_FRIENDLY_NAME("Visualization Type");
 
 /// The model of the peripheral endpoint.
 static const std::string PERIPHERAL_ENDPOINT_ADDITIONAL_ATTRIBUTE_MODEL("Model1");
@@ -308,38 +297,6 @@ static const std::string PERIPHERAL_ENDPOINT_ADDITIONAL_ATTRIBUTE_SOFTWARE_VERSI
 
 /// The custom identifier peripheral endpoint.
 static const std::string PERIPHERAL_ENDPOINT_ADDITIONAL_ATTRIBUTE_CUSTOM_IDENTIFIER("SampleApp");
-
-#ifdef RANGE_CONTROLLER
-/// The range controller preset 'high' in peripheral endpoint.
-static const double PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_PRESET_HIGH = 10;
-
-/// The range controller preset 'medium' in peripheral endpoint.
-static const double PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_PRESET_MEDIUM = 5;
-
-/// The range controller preset 'low' in peripheral endpoint.
-static const double PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_PRESET_LOW = 1;
-
-/// The action ID for "raise" semantic annotations.
-static const std::string SEMANTICS_ACTION_ID_RAISE("Alexa.Actions.Raise");
-
-/// The action ID for "lower" semantic annotations.
-static const std::string SEMANTICS_ACTION_ID_LOWER("Alexa.Actions.Lower");
-
-/// The range controller SetRangeValue directive name.
-static const std::string SETRANGE_DIRECTIVE_NAME("SetRangeValue");
-
-/// The range controller SetRangeValue payload mapped to the raise action.
-static const std::string PERIPHERAL_ENDPOINT_RAISE_PAYLOAD =
-    R"({"rangeValue":)" + std::to_string(PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_PRESET_HIGH) + R"(})";
-
-/// The range controller SetRangeValue payload mapped to the lower action.
-static const std::string PERIPHERAL_ENDPOINT_LOWER_PAYLOAD =
-    R"({"rangeValue":)" + std::to_string(PERIPHERAL_ENDPOINT_RANGE_CONTROLLER_PRESET_LOW) + R"(})";
-#endif  // RANGE_CONTROLLER
-
-/// US English locale string.
-static const std::string EN_US("en-US");
-#endif  // ENABLE_ENDPOINT_CONTROLLERS
 
 /**
  * Create a LogEntry using this file's TAG and the specified event string.
@@ -1719,12 +1676,10 @@ bool PreviewAlexaClient::addControllersToPeripheralEndpoint(
     auto peripheralEndpointModeControllerAttributes = buildModeControllerAttributes(
         {{{FriendlyName::Type::ASSET, avsCommon::avs::resources::ASSET_ALEXA_SETTING_MODE},
           {FriendlyName::Type::TEXT, PERIPHERAL_ENDPOINT_MODE_CONTROLLER_FRIENDLY_NAME}}},
-        {{PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_RED,
-          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_RED}}},
-         {PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_GREEN,
-          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_GREEN}}},
-         {PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_BLUE,
-          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::MODE_CONTROLLER_MODE_BLUE}}}});
+        {{PeripheralEndpointModeControllerHandler::LED_MODE_PULSE,
+          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::LED_MODE_PULSE}}},
+         {PeripheralEndpointModeControllerHandler::LED_MODE_BARS,
+          {{FriendlyName::Type::TEXT, PeripheralEndpointModeControllerHandler::LED_MODE_BARS}}}});
 
     if (!peripheralEndpointModeControllerAttributes.hasValue()) {
         ACSDK_CRITICAL(LX("Failed to create default endpoint mode controller attributes!"));
