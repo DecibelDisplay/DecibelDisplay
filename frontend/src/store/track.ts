@@ -28,7 +28,7 @@ export default class TrackModule extends VuexModule {
     history: Track[] = []; // initialize empty for now
     nextToPlay: Track | null = null;
     startedAt = Date.now();
-    playing = false;
+    playing = true;
     pausedTime = 0;
 
     get previousTrack(): Track {

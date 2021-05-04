@@ -1,14 +1,14 @@
 <template>
-    <header class="grid grid-rows-2 items-center justify-center mt-16 text-other">
+    <header class="grid grid-rows-2 items-center justify-center text-other">
         <div class="text-center">
             <h1 class="font-heading text-3xl">Good {{ timeOfDay }}!</h1>
             <strong class="block font-heading text-6xl mt-6">{{ timeStr }}</strong>
         </div>
 
         <ul class="flex space-x-4">
-            <li><Measurement :title="temp" :logo="temperatureLogo" /></li>
-            <li><Measurement :title="hum" :logo="humidityLogo" /></li>
-            <li><Measurement :title="pres" :logo="pressureLogo" /></li>
+            <li><Measurement :title="temp" logo="temperature" /></li>
+            <li><Measurement :title="hum" logo="humidity" /></li>
+            <li><Measurement :title="pres" logo="pressure" /></li>
         </ul>
     </header>
 </template>
@@ -18,9 +18,6 @@ import { defineComponent, ref, computed } from "vue";
 import { getModule } from "vuex-module-decorators";
 import SensorModule from "@/store/sensor";
 import Measurement from "@/components/Measurement.vue";
-import temperatureLogo from "@/assets/svg/temperature.svg";
-import humidityLogo from "@/assets/svg/humidity.svg";
-import pressureLogo from "@/assets/svg/pressure.svg";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -46,11 +43,11 @@ export default defineComponent({
         });
 
         const sensorStore = getModule(SensorModule);
-        const temp = computed(() => sensorStore.temperature.toFixed(1) + " °C");
+        const temp = computed(() => sensorStore.temperature.toFixed(1) + " °F");
         const hum = computed(() => sensorStore.humidity.toFixed(1) + "%");
-        const pres = computed(() => sensorStore.pressure.toFixed(1) + " hPa");
+        const pres = computed(() => sensorStore.pressure.toFixed(1) + " inHg");
 
-        return { temperatureLogo, humidityLogo, pressureLogo, timeStr, timeOfDay, temp, hum, pres };
+        return { timeStr, timeOfDay, temp, hum, pres };
     }
 });
 </script>

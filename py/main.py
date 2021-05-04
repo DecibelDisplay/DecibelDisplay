@@ -45,7 +45,9 @@ async def main():
         # btagent.py (Accepts pairing, trusts device, etc.)
         run_btagent(btmanager, CAPABILITY),
         # visualize.py (Controls the LEDs)
-        run_visualize(loop)
+        run_visualize(loop),
+        # sensor.py (Sends sensor data to frontend)
+        run_sensor(sock)
     )
 
     tasks = asyncio.Task.all_tasks()

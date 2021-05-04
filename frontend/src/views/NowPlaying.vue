@@ -1,5 +1,5 @@
 <template>
-    <main class="h-screen w-[100vw] grid grid-rows-[0.25fr,auto,auto,auto,1fr] justify-center color-bg">
+    <main class="h-screen w-[100vw] grid grid-rows-[1fr,auto,auto,auto,1fr] justify-center color-bg">
         <div><!-- Empty top --></div>
         <InfoDisplay :color="infoColor" />
         <ol class="grid grid-cols-[3fr,1fr,4fr,1fr,3fr] items-center pb-16 h-auto h-[fit-content] my-20" :style="{ color: textColor }">

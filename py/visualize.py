@@ -252,7 +252,6 @@ async def zmq_listener():
     vsock = ctx.socket(zmq.PULL)
     vsock.connect("tcp://127.0.0.1:9001")
     while True:
-        print("LOOP OK")
         try:
             msg = await vsock.recv() # waits for msg to be ready
             msg = msg.decode()

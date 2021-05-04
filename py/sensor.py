@@ -25,7 +25,7 @@ class Sensor:
 
     def read(self):
         self._read_values()
-        data = {"temperature": self.temp, "humidity": self.hum, "pressure": self.pres}
+        data = {"temperature": self.temp * 1.8 + 32, "humidity": self.hum, "pressure": self.pres / 33.863886666667}
         self.sock.send_json({"category": "sensor", "cmd": "sensor", "data": data})
 
 
@@ -40,4 +40,4 @@ async def run_sensor(sock):
     bme = Sensor(sock)
     while True:
         bme.read()
-        asyncio.sleep(5)
+        await asyncio.sleep(5)

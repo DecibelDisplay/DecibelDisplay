@@ -13,17 +13,18 @@ protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: tru
 async function createWindow() {
     // Create the browser window.
     const win = new BrowserWindow({
-        width: 607, //1080,
-        height: 1080, //1920,
+        width: 1080,
+        height: 1920,
         webPreferences: {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
             nodeIntegration: true,
             contextIsolation: false,
-            enableRemoteModule: true
-        }
-        // frame: false
-        // fullscreen: true
+            enableRemoteModule: true,
+            zoomFactor: 1.5
+        },
+        frame: false,
+        fullscreen: true
     });
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -85,22 +86,8 @@ if (isDevelopment) {
     }
 }
 
-async function runTemporaryThing(win: BrowserWindow) {
-    const PORT = 7008;
-    const sock = new zmq.Pull();
-
-    sock.connect(`tcp://127.0.0.1:${PORT}`);
-    console.log(`ZMQ Listening on port ${PORT}`);
-
-    for await (const [msg] of sock) {
-        console.log(`got message: ${msg}`);
-        win.webContents.send("data", JSON.parse(msg.toString()));
-    }
-}
-
 async function createZMQListener(win: BrowserWindow) {
-    runTemporaryThing(win);
-    const PORT = 7007;
+    const PORT = 7008;
     const sock = new zmq.Pull();
 
     sock.connect(`tcp://127.0.0.1:${PORT}`);
