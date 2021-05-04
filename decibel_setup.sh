@@ -98,6 +98,23 @@ sudo cp ~/.asoundrc /etc/asound.conf
 cd "$PROJ_DIR/sdk-folder"
 ./install_reqs.sh
 
+# Install ZMQ library for C++
+cd ~
+git clone https://github.com/zeromq/libzmq.git
+cd libzmq
+mkdir build
+cd build
+cmake ..
+sudo make -j2 install
+
+cd ~
+git clone https://github.com/zeromq/cppzmq.git
+cd cppzmq
+mkdir build
+cd build
+cmake ..
+sudo make -j2 install
+
 # Sensory Wake Word
 cd "$PROJ_DIR/sdk-folder/third-party"
 sudo rm -rf alexa-rpi

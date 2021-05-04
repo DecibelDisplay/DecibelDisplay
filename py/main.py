@@ -29,11 +29,9 @@ CAPABILITY = "DisplayYesNo" # The capability mode the BT agent acts in
 loop = asyncio.get_event_loop()
 
 # Set up ZMQ Messaging Server
-context = zmq.Context()
+context = zmq.asyncio.Context()
 sock = context.socket(zmq.PUSH) # pylint: disable=no-member
 sock.bind(f"tcp://127.0.0.1:{ZMQ_PORT}")
-
-
 
 
 async def main():
@@ -41,7 +39,7 @@ async def main():
     btmanager = BluetoothManager()
     await btmanager.initialize(sock)
 
-    await asyncio.gather(
+    asyncio.gather(
         # btclient.py (sets Discoverable, listens for track changes, etc.)
         run_btclient(btmanager),
         # btagent.py (Accepts pairing, trusts device, etc.)
@@ -49,6 +47,9 @@ async def main():
         # visualize.py (Controls the LEDs)
         run_visualize(loop)
     )
+
+    tasks = asyncio.Task.all_tasks()
+    await asyncio.wait(tasks)
 
     # # sensor.py (Controls the sensors)
     # cprint("Starting sensor.py", "cyan")

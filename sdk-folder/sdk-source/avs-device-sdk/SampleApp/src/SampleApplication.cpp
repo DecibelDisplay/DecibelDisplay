@@ -258,7 +258,7 @@ static const std::string PERIPHERAL_ENDPOINT_FRIENDLYNAME("DecibelLEDs");
 static const std::string PERIPHERAL_ENDPOINT_MANUFACTURER_NAME("Sample Manufacturer");
 
 /// The display category of the peripheral endpoint.
-static const std::vector<std::string> PERIPHERAL_ENDPOINT_DISPLAYCATEGORY({"OTHER"});
+static const std::vector<std::string> PERIPHERAL_ENDPOINT_DISPLAYCATEGORY({"LIGHT"});
 
 /// The instance name for the toggle controller in peripheral endpoint.
 static const std::string PERIPHERAL_ENDPOINT_TOGGLE_CONTROLLER_INSTANCE_NAME("DecibelLEDs.Light");

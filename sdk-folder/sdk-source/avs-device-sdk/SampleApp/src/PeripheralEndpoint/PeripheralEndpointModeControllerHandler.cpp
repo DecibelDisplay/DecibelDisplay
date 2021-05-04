@@ -22,6 +22,8 @@
 #include <AVSCommon/Utils/JSON/JSONUtils.h>
 #include <AVSCommon/Utils/Logger/Logger.h>
 
+#include <zmq.hpp>
+
 /// String to identify log entries originating from this file.
 static const std::string TAG("PeripheralEndpointModeControllerHandler");
 
@@ -42,6 +44,11 @@ using namespace avsCommon::sdkInterfaces::modeController;
 const std::string PeripheralEndpointModeControllerHandler::LED_MODE_PULSE = "Pulse";
 
 const std::string PeripheralEndpointModeControllerHandler::LED_MODE_BARS = "Bars";
+
+// ZMQ Message Socket
+zmq::context_t ctx;
+zmq::socket_t sock(ctx, zmq::socket_type::push);
+    
 
 /**
  * Helper function to notify mode value change to the observers of @c ModeControllerObserverInterface.
@@ -65,6 +72,10 @@ std::shared_ptr<PeripheralEndpointModeControllerHandler> PeripheralEndpointModeC
     const std::string& instance) {
     auto modeControllerHandler = std::shared_ptr<PeripheralEndpointModeControllerHandler>(
         new PeripheralEndpointModeControllerHandler(endpointName, instance));
+
+    // Initialize ZMQ
+    sock.bind("tcp://127.0.0.1:9001");
+
     return modeControllerHandler;
 }
 
@@ -99,7 +110,10 @@ std::pair<AlexaResponseType, std::string> PeripheralEndpointModeControllerHandle
         m_currentMode = mode;
 
         // TODO: Actual handler code goes here
-
+        if (mode.compare("Pulse") == 0)
+            sock.send(zmq::str_buffer("Pulse"), zmq::send_flags::dontwait);
+        else if (mode.compare("Bars") == 0)
+            sock.send(zmq::str_buffer("Bars"), zmq::send_flags::dontwait);
 
         copyOfObservers = m_observers;
         notifyObserver = true;

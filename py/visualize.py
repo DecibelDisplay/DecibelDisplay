@@ -19,6 +19,11 @@ from colorzero import Color
 
 import mute_alsa
 
+import asyncio
+import zmq
+import zmq.asyncio
+
+
 num_LEDs = 150 # Number of LEDs used
 pixels = neopixel.NeoPixel(board.D18, num_LEDs, auto_write=False)
 
@@ -234,11 +239,47 @@ def pulse_visualization(mags):
     pixels.show()
 
 
+current_visualization = pulse_visualization
+
+def stream_callback(*args):
+    global current_visualization
+    return current_visualization(*args)
+
+async def zmq_listener():
+    global current_visualization, pulse_visualization, bars_visualization
+    # Listener for Alexa to change LED mode
+    ctx = zmq.asyncio.Context()
+    vsock = ctx.socket(zmq.PULL)
+    vsock.connect("tcp://127.0.0.1:9001")
+    while True:
+        print("LOOP OK")
+        try:
+            msg = await vsock.recv() # waits for msg to be ready
+            msg = msg.decode()
+            if msg == "Pulse":
+                current_visualization = pulse_visualization
+                cprint("Successfully updated visualization mode to PULSE", "green")
+            elif msg == "Bars":
+                current_visualization = bars_visualization
+                cprint("Successfully updated visualization mode to BARS", "green")
+            else:
+                raise RuntimeError(f"Not a valid visualization mode: {msg}")
+        except Exception as e:
+            cprint("Error in zmq recv, visualize.py", "red")
+            print(e)
+        
+        await asyncio.sleep(0.5)
+    
+    print("LOOP ENDED")
+
+
 if __name__ == "__main__":
     start_stream(bars_visualization)
 
 async def run_visualize(loop):
     cprint("Starting visualize.py", "cyan")
-    await loop.run_in_executor(None, start_stream, pulse_visualization)
+
+    loop.run_in_executor(None, start_stream, stream_callback)
+    await loop.create_task(zmq_listener())
     print("Done")
     # await loop.create_future()

@@ -144,5 +144,10 @@ add_executable(SampleApp
 
 target_link_libraries(SampleApp LibSampleApp)
 
+#find cppzmq wrapper, installed by make of cppzmq
+find_package(cppzmq)
+target_link_libraries(SampleApp cppzmq)
+
+
 # install target
 asdk_install_targets(LibSampleApp TRUE)
