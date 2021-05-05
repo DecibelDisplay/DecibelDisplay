@@ -1,4 +1,3 @@
-#rm -rf ./sdk-build
 mkdir sdk-build
 cd sdk-build
 
