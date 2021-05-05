@@ -229,12 +229,14 @@ def pulse_visualization(mags):
     p[2, 0] = 255 * b ** 2 if b > 0.2 else p[2, 0] * ((decay - 1.0) / decay + b / decay)
   
 
-    rgb_pixels = np.concatenate((p[:, ::-1], p), axis=1)
+    rgb_pixels = np.concatenate((p[:, ::-1], p), axis=1) # Mirror
     
     cutoff = np.max(mags) / 2
     rgb_pixels[rgb_pixels < cutoff] = 0
 
-    pixels[::] = [rgb_pixels[:, i] for i in range(len(rgb_pixels[0]))] # Mirror
+
+    # This is a fix since the LEDs on the actual display isn't perfectly aligned
+    pixels[::] = np.roll([rgb_pixels[:, i] for i in range(len(rgb_pixels[0]))], -25)
 
     pixels.show()
 

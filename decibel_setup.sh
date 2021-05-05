@@ -152,3 +152,9 @@ cd "$PROJ_DIR/sdk-folder"
 # Create startup scripts
 # Python -> ??
 # Alexa + Electron -> PM2 (easier to access)/home/pi/DecibelDisplay/decibel_setup.sh
+
+
+# Disable screen sleep
+# sudo nano /etc/xdg/lxsession/LXDE-pi/autostart
+# @xset s off
+# @xset -dpms
