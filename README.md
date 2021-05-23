@@ -2,6 +2,8 @@
 
 A smart, Alexa-built in Bluetooth speaker.
 
+<img src="/images/DecibelDisplay.jpg" width="512">
+
 # Requirements
 
 - [BME 280 Tempearature/Humidity/Pressure sensor](https://www.amazon.com/Compatible-Temperature-Humidity-Atmospheric-Barometric/dp/B08HT1X1S1)
@@ -21,3 +23,9 @@ This project has only been tested on the Raspberry Pi 4B; however it should work
 4. Perform the manual adjustments specified at the end of the file
 
 To start everything, run `run_all.sh`. This runs the backend Python application, the frontend Electron application, and the Alexa application.
+
+# Images
+
+<img src="/images/LEDs.png" width="512">
+
+<img src="/images/GUI.png" width="512">
