@@ -149,9 +149,14 @@ cd "$PROJ_DIR/sdk-folder"
   #.endif
 # otherwise Alexa won't be able to control the Bluetooth audio
 
-# Create startup scripts
-# Python -> ??
-# Alexa + Electron -> PM2 (easier to access)/home/pi/DecibelDisplay/decibel_setup.sh
+# Startup using xdg startup service
+# [Desktop Entry]
+# Type=Application
+# Name=decibel-display
+# Comment=Decibel Display GUI and backend
+# NoDisplay=false
+# Exec=sudo /usr/bin/lxterminal -e /home/pi/DecibelDisplay/run_all.sh
+# NotShowIn=GNOME;KDE;XFCE;
 
 
 # Disable screen sleep
